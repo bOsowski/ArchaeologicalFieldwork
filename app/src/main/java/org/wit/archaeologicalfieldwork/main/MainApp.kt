@@ -3,15 +3,18 @@ package org.wit.archaeologicalfieldwork.main
 import android.app.Application
 import org.jetbrains.anko.AnkoLogger
 import org.wit.archaeologicalfieldwork.models.*
-import org.wit.archaeologicalfieldwork.models.stores.Store
+import org.wit.archaeologicalfieldwork.models.stores.HillfortMemStore
+import org.wit.archaeologicalfieldwork.models.stores.UserMemStore
 
 class MainApp : Application(), AnkoLogger{
 
-    lateinit var users: Store<User>
-    lateinit var forts: Store<Hillfort>
-    lateinit var visits: Store<Visit>
+    lateinit var users: UserMemStore
+    lateinit var currentUser: User
+    lateinit var forts: HillfortMemStore
 
     override fun onCreate() {
         super.onCreate()
+        users = UserMemStore()
+        forts = HillfortMemStore()
     }
 }

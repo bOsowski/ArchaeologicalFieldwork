@@ -30,7 +30,7 @@ class HillfortMemStore : Store<Hillfort>{
         hillforts.remove(item)
     }
 
-    protected fun getId() : Long{
+    fun getId() : Long{
         var largestId: Long = -1
         hillforts.forEach{
             if(largestId < it.id){

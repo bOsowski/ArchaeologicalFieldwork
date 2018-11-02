@@ -27,8 +27,10 @@ import android.Manifest.permission.READ_CONTACTS
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.R
+import org.wit.archaeologicalfieldwork.models.User
 
 /**
  * A login screen that offers login via email/password.
@@ -47,7 +49,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         setContentView(R.layout.activity_login)
         app = application as MainApp
         // Set up the login form.
-        populateAutoComplete()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
@@ -57,49 +58,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         })
 
         email_sign_in_button.setOnClickListener { attemptLogin() }
-    }
-
-    private fun populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return
-        }
-
-        loaderManager.initLoader(0, null, this)
-    }
-
-    private fun mayRequestContacts(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                .setAction(android.R.string.ok,
-                    { requestPermissions(arrayOf(READ_CONTACTS),
-                        REQUEST_READ_CONTACTS
-                    ) })
-        } else {
-            requestPermissions(arrayOf(READ_CONTACTS),
-                REQUEST_READ_CONTACTS
-            )
-        }
-        return false
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete()
-            }
-        }
     }
 
 
@@ -266,23 +224,28 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            info("User tried to log in with ${email.text}, ${password.text}")
-            // TODO: attempt authentication against a network service.
-            try {
-                // Simulate network access.
-                Thread.sleep(2000)
-            } catch (e: InterruptedException) {
-                return false
-            }
-
-            return DUMMY_CREDENTIALS
-                .map { it.split(":") }
-                .firstOrNull { it[0] == mEmail }
-                ?.let {
-                    // Account exists, return true if the password matches.
-                    it[1] == mPassword
+            var user: User? = app.users.findAll().find { it.email == mEmail }
+            return when {
+                user != null && user.password == mPassword -> {
+                    app.currentUser = user
+                    info("User tried to log in with $mEmail, $mPassword. User found and password matching.")
+                    startActivity(intentFor<MainActivity>())
+                    true
                 }
-                ?: true
+                user != null -> {
+                    info("User tried to log in with $mEmail, $mPassword. User email found but mismatching password.")
+                    false
+                }
+                else -> {
+                    info("User tried to log in with $mEmail, $mPassword. User email not found. Creating new user")
+                    user = User()
+                    user.email = mEmail
+                    user.password = mPassword
+                    app.users.create(user)
+                    startActivity(intentFor<MainActivity>())
+                    true
+                }
+            }
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -301,19 +264,5 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
             mAuthTask = null
             showProgress(false)
         }
-    }
-
-    companion object {
-
-        /**
-         * Id to identity READ_CONTACTS permission request.
-         */
-        private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }

@@ -6,6 +6,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize class User(
     var id: Long = -1,
     var email: String = "",
-    var password: String = "",
-    var visits: List<Visit> = ArrayList<Visit>()
+    var password: String = ""
 ) : Parcelable

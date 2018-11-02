@@ -11,6 +11,7 @@ class UserMemStore : Store<User>{
     }
 
     override fun create(item: User) {
+        item.id = getId()
         users.add(item)
     }
 
@@ -26,7 +27,7 @@ class UserMemStore : Store<User>{
         users.remove(item)
     }
 
-    protected fun getId() : Long{
+    fun getId() : Long{
         var largestId: Long = -1
         users.forEach{
             if(largestId < it.id){
