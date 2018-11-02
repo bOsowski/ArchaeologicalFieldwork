@@ -7,6 +7,5 @@ import java.util.*
 @Parcelize
 data class Visit(
     var date: Date = Date(),
-    var username: String = "",
-    var hillfortId: Long = -1
+    var userId: Long = -1
     ) : Parcelable

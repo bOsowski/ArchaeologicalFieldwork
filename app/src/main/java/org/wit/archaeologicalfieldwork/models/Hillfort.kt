@@ -11,5 +11,6 @@ data class Hillfort(
     var images: List<String> = ArrayList<String>(),
     var location: Location = Location(),
     var addedBy: String = "",
-    var notes: List<String> = ArrayList<String>()
+    var notes: List<String> = ArrayList<String>(),
+    var visits: List<Visit> = ArrayList<Visit>()
 ) : Parcelable
