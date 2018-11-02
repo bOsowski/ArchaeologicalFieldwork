@@ -21,7 +21,6 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
 
     val IMAGE_REQUEST = 1
     val LOCATION_REQUEST = 2
-    var location = Location(52.245696, -7.139102, 15f)
     var hillfort = Hillfort()
     lateinit var app : MainApp
 
@@ -38,7 +37,7 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
         var editing = false
 
         if (intent.hasExtra("hillfort_edit")) {
-            hillfort = intent.extras.getParcelable("hillfort_edit")
+            hillfort = intent.extras.getParcelable<Hillfort>("hillfort_edit")
             hillfortName.setText(hillfort.name)
             hillfortDescription.setText(hillfort.description)
             try{
@@ -54,6 +53,7 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
         btnAdd.setOnClickListener {
             hillfort.name = hillfortName.text.toString()
             hillfort.description = hillfortDescription.text.toString()
+            hillfort.addedBy = app.currentUser.id
             if (hillfort.name.isNotEmpty()) {
                 if(editing) app.forts.update(hillfort.copy()) else app.forts.create(hillfort.copy())
                 info("'${btnAdd.text}' Button Pressed: $hillfortName")
@@ -69,10 +69,11 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
         }
 
         hillfortLocation.setOnClickListener {
+            var location = Location(52.245696, -7.139102, 15f)
             if(hillfort.location.zoom != 0f){
                 location = hillfort.location
             }
-            //startActivityForResult(intentFor<MapsActivity>().putExtra("location", location), LOCATION_REQUEST)
+            startActivityForResult(intentFor<MapsActivity>().putExtra("location", location), LOCATION_REQUEST)
         }
 
         delete.setOnClickListener {

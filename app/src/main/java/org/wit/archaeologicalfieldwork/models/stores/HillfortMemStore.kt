@@ -2,7 +2,7 @@ package org.wit.archaeologicalfieldwork.models.stores
 
 import org.wit.archaeologicalfieldwork.models.Hillfort
 
-class HillfortMemStore : Store<Hillfort>{
+open class HillfortMemStore : Store<Hillfort>{
 
     var hillforts = mutableListOf<Hillfort>()
 

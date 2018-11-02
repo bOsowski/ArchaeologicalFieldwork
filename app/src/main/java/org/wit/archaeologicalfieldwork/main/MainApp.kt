@@ -3,8 +3,7 @@ package org.wit.archaeologicalfieldwork.main
 import android.app.Application
 import org.jetbrains.anko.AnkoLogger
 import org.wit.archaeologicalfieldwork.models.*
-import org.wit.archaeologicalfieldwork.models.stores.HillfortMemStore
-import org.wit.archaeologicalfieldwork.models.stores.UserMemStore
+import org.wit.archaeologicalfieldwork.models.stores.*
 
 class MainApp : Application(), AnkoLogger{
 
@@ -14,8 +13,8 @@ class MainApp : Application(), AnkoLogger{
 
     override fun onCreate() {
         super.onCreate()
-        users = UserMemStore()
-        forts = HillfortMemStore()
+        users = UserJSONStore(applicationContext)
+        forts = HillfortJSONStore(applicationContext)
         var hillfort = Hillfort()
         hillfort.name = "Nice hillfort"
         hillfort.description = "it's very nice."

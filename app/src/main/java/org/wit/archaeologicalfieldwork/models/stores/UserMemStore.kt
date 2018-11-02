@@ -2,7 +2,7 @@ package org.wit.archaeologicalfieldwork.models.stores
 
 import org.wit.archaeologicalfieldwork.models.User
 
-class UserMemStore : Store<User>{
+open class UserMemStore : Store<User>{
 
     var users = mutableListOf<User>()
 
