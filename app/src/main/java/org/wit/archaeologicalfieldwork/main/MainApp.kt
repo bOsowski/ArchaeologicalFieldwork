@@ -16,5 +16,9 @@ class MainApp : Application(), AnkoLogger{
         super.onCreate()
         users = UserMemStore()
         forts = HillfortMemStore()
+        var hillfort = Hillfort()
+        hillfort.name = "Nice hillfort"
+        hillfort.description = "it's very nice."
+        forts.create(hillfort)
     }
 }

@@ -8,9 +8,9 @@ data class Hillfort(
     var id: Long = -1,
     var name: String = "",
     var description: String = "",
-    var images: List<String> = ArrayList<String>(),
+    var images: ArrayList<String> = ArrayList<String>(),
     var location: Location = Location(),
     var addedBy: String = "",
-    var notes: List<String> = ArrayList<String>(),
-    var visits: List<Visit> = ArrayList<Visit>()
+    var notes: ArrayList<String> = ArrayList<String>(),
+    var visits: ArrayList<Visit> = ArrayList<Visit>()
 ) : Parcelable

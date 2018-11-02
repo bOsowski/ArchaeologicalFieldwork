@@ -3,8 +3,6 @@ package org.wit.archaeologicalfieldwork.activities
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.pm.PackageManager
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
 import android.content.CursorLoader
@@ -22,7 +20,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 
 import java.util.ArrayList
-import android.Manifest.permission.READ_CONTACTS
 
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.AnkoLogger
@@ -48,6 +45,16 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         app = application as MainApp
+
+        //todo: remove the below
+        startActivity(intentFor<ListActivity>())
+        var user: User = User()
+        user.email = "test@test.test"
+        user.password = "testPassword"
+        app.users.create(User())
+        app.currentUser = app.users.findAll().first()
+        finish()
+
         // Set up the login form.
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -229,7 +236,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                 user != null && user.password == mPassword -> {
                     app.currentUser = user
                     info("User tried to log in with $mEmail, $mPassword. User found and password matching.")
-                    startActivity(intentFor<MainActivity>())
+                    startActivity(intentFor<ListActivity>())
                     true
                 }
                 user != null -> {
@@ -242,7 +249,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                     user.email = mEmail
                     user.password = mPassword
                     app.users.create(user)
-                    startActivity(intentFor<MainActivity>())
+                    startActivity(intentFor<ListActivity>())
                     true
                 }
             }
