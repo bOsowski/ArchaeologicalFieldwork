@@ -30,4 +30,7 @@
     <string name="menu_addHillfort">Add</string>
     <string name="menu_cancel">Cancel</string>
     <string name="title_activity_maps">Map</string>
+    <string name="visited">Visited</string>
+
+    <string name="visited_time">Visited on %1$s.</string>
 </resources>

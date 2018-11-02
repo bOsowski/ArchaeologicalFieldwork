@@ -91,6 +91,10 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="14sp" />
 
+                <CheckBox
+                        android:text="@string/visited"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/visitedCheckBox"/>
                 <ImageView
                         android:id="@+id/hillfortImage"
                         android:layout_width="match_parent"

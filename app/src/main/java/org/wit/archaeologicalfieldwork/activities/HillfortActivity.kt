@@ -1,13 +1,15 @@
 package org.wit.archaeologicalfieldwork.activities
 
+import android.app.DatePickerDialog
+import android.app.FragmentManager
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.DatePicker
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_hillfort.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
+import org.w3c.dom.Text
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.helpers.readImage
 import org.wit.archaeologicalfieldwork.helpers.readImageFromPath
@@ -15,12 +17,17 @@ import org.wit.archaeologicalfieldwork.helpers.showImagePicker
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Location
+import org.wit.archaeologicalfieldwork.models.Visit
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.xml.datatype.DatatypeConstants.MONTHS
 
 class HillfortActivity : AppCompatActivity(), AnkoLogger {
 
     val IMAGE_REQUEST = 1
     val LOCATION_REQUEST = 2
+    val TIME_REQUEST = 3
     var hillfort = Hillfort()
     lateinit var app : MainApp
 
@@ -37,9 +44,14 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
         var editing = false
 
         if (intent.hasExtra("hillfort_edit")) {
-            hillfort = intent.extras.getParcelable<Hillfort>("hillfort_edit")
+            hillfort = intent.extras.getParcelable("hillfort_edit")
             hillfortName.setText(hillfort.name)
             hillfortDescription.setText(hillfort.description)
+            val visit = hillfort.visits.find { it.userId == app.currentUser.id }
+            if(visit != null){
+                visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(visit.date))
+            }
+            visitedCheckBox.isChecked = visit != null
             try{
                 hillfortImage.setImageBitmap(readImageFromPath(this, hillfort.images.first()))
             }catch (e: Exception){
@@ -50,13 +62,57 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
             editing = true
         }
 
+
+        var date: Date? = null
+
+        visitedCheckBox.setOnClickListener {
+            if(visitedCheckBox.isChecked){
+                alert {
+                    isCancelable = false
+                    lateinit var datePicker: DatePicker
+                    customView {
+                        verticalLayout {
+                            datePicker = datePicker {
+                                maxDate = System.currentTimeMillis()
+                            }
+                        }
+                    }
+                    yesButton {
+                        val rawDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
+                        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+                        date = sdf.parse(rawDate)
+                        visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(date!!))
+                    }
+                    noButton {
+                        visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(Date()))
+                    }
+                }.show()
+            }
+            else{
+                visitedCheckBox.setText(R.string.visited)
+            }
+        }
+
         btnAdd.setOnClickListener {
             hillfort.name = hillfortName.text.toString()
             hillfort.description = hillfortDescription.text.toString()
             hillfort.addedBy = app.currentUser.id
+            if(visitedCheckBox.isChecked){
+                var visit = Visit()
+                visit.userId = app.currentUser.id
+                if(date != null){
+                    visit.date = date!!
+                }
+                else{
+                    visit.date = Date()
+                }
+                hillfort.visits.add(visit)
+            }
+            else{
+                hillfort.visits.remove(hillfort.visits.find { it.userId == app.currentUser.id })
+            }
             if (hillfort.name.isNotEmpty()) {
                 if(editing) app.forts.update(hillfort.copy()) else app.forts.create(hillfort.copy())
-                info("'${btnAdd.text}' Button Pressed: $hillfortName")
                 setResult(AppCompatActivity.RESULT_OK)
                 finish()
             }else{
@@ -97,5 +153,9 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         }
+    }
+
+    private fun simplifyDate(date: Date) : String{
+        return SimpleDateFormat.getDateInstance().format(date).toString()
     }
 }
