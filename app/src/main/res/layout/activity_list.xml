@@ -29,7 +29,7 @@
             android:background="?attr/colorPrimary"
             android:layout_gravity="start|bottom"
             android:src="@android:drawable/ic_menu_preferences"
-            android:layout_margin="16dp" app:backgroundTint="?attr/colorPrimary" app:elevation="0dp"/>
+            android:layout_margin="16dp" app:backgroundTint="?attr/colorPrimary" app:elevation="4dp"/>
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

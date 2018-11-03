@@ -48,10 +48,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
         //todo: remove the below
         startActivity(intentFor<ListActivity>())
-        var user: User = User()
+        var user = User()
         user.email = "test@test.test"
         user.password = "testPassword"
-        app.users.create(User())
+        app.users.create(user)
         app.currentUser = app.users.findAll().first()
         finish()
 
