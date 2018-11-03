@@ -7,5 +7,6 @@ import java.util.*
 @Parcelize
 data class Note(var userId: Long = -1,
                 var text: String = "",
-                var date: Date = Date()
+                var creationDate: Date = Date(),
+                var lastEdited: Date = Date()
 ) : Parcelable

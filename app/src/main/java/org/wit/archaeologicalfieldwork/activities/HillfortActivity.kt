@@ -14,6 +14,7 @@ import org.wit.archaeologicalfieldwork.helpers.showImagePicker
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Location
+import org.wit.archaeologicalfieldwork.models.Note
 import org.wit.archaeologicalfieldwork.models.Visit
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +32,6 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
 
     lateinit var editedImage: String
 
-    var hillfort = Hillfort()
     lateinit var app : MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,10 +50,10 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
         var editing = false
 
         if (intent.hasExtra("hillfort_edit")) {
-            hillfort = intent.extras.getParcelable("hillfort_edit")
-            hillfortName.setText(hillfort.name)
-            hillfortDescription.setText(hillfort.description)
-            val visit = hillfort.visits.find { it.userId == app.currentUser.id }
+            app.currentFort = intent.extras.getParcelable("hillfort_edit")
+            hillfortName.setText(app.currentFort.name)
+            hillfortDescription.setText(app.currentFort.description)
+            val visit = app.currentFort.visits.find { it.userId == app.currentUser.id }
             if(visit != null){
                 visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(visit.date))
             }
@@ -61,7 +61,7 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
             btnAdd.setText(R.string.button_editHillfort)
             //chooseImage.setText(R.string.button_editImage)
             editing = true
-            showImages(hillfort.images)
+            showImages(app.currentFort.images)
         }
 
         var date: Date? = null
@@ -95,9 +95,9 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
         }
 
         btnAdd.setOnClickListener {
-            hillfort.name = hillfortName.text.toString()
-            hillfort.description = hillfortDescription.text.toString()
-            hillfort.addedBy = app.currentUser.id
+            app.currentFort.name = hillfortName.text.toString()
+            app.currentFort.description = hillfortDescription.text.toString()
+            app.currentFort.addedBy = app.currentUser.id
             if(visitedCheckBox.isChecked){
                 var visit = Visit()
                 visit.userId = app.currentUser.id
@@ -107,13 +107,13 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
                 else{
                     visit.date = Date()
                 }
-                hillfort.visits.add(visit)
+                app.currentFort.visits.add(visit)
             }
             else{
-                hillfort.visits.remove(hillfort.visits.find { it.userId == app.currentUser.id })
+                app.currentFort.visits.remove(app.currentFort.visits.find { it.userId == app.currentUser.id })
             }
-            if (hillfort.name.isNotEmpty()) {
-                if(editing) app.forts.update(hillfort.copy()) else app.forts.create(hillfort.copy())
+            if (app.currentFort.name.isNotEmpty()) {
+                if(editing) app.forts.update(app.currentFort.copy()) else app.forts.create(app.currentFort.copy())
                 setResult(AppCompatActivity.RESULT_OK)
                 finish()
             }else{
@@ -127,38 +127,43 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
 
         hillfortLocation.setOnClickListener {
             var location = Location(52.245696, -7.139102, 15f)
-            if(hillfort.location.zoom != 0f){
-                location = hillfort.location
+            if(app.currentFort.location.zoom != 0f){
+                location = app.currentFort.location
             }
             startActivityForResult(intentFor<MapsActivity>().putExtra("location", location), LOCATION_REQUEST)
         }
 
         delete.setOnClickListener {
-            app.forts.delete(hillfort)
+            app.forts.delete(app.currentFort)
             finish()
+        }
+
+        viewNotes.setOnClickListener {
+            info("View notes clicked.")
+            startActivity(intentFor<NotesActivity>())
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        showImages(hillfort.images)
+        showImages(app.currentFort.images)
         when(requestCode){
             ADD_IMAGE_REQUEST -> {
                 if(data != null){
-                    hillfort.images.add(data.data.toString())
+                    app.currentFort.images.add(data.data.toString())
                 }
             }
             IMAGE_EDIT_REQUEST -> {
                 if(data != null){
-                    hillfort.images[hillfort.images.indexOf(editedImage)] = data.data.toString()
+                    app.currentFort.images[app.currentFort.images.indexOf(editedImage)] = data.data.toString()
                 }
                 else{
-                    hillfort.images.remove(editedImage)
+                    app.currentFort.images.remove(editedImage)
                 }
             }
             LOCATION_REQUEST -> {
                 if (data != null) {
-                    hillfort.location = data.extras.getParcelable("location")
+                    app.currentFort.location = data.extras.getParcelable("location")
                 }
             }
         }

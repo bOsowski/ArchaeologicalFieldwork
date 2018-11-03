@@ -10,6 +10,7 @@ class MainApp : Application(), AnkoLogger{
     lateinit var users: UserMemStore
     lateinit var currentUser: User
     lateinit var forts: HillfortMemStore
+    lateinit var currentFort: Hillfort
 
     override fun onCreate() {
         super.onCreate()

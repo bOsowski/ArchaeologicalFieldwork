@@ -95,14 +95,8 @@
                         android:text="@string/visited"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/visitedCheckBox"
-                        android:layout_marginLeft="8dp"/>
+                        android:layout_marginStart="8dp" android:layout_marginBottom="8dp"/>
 
-                <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:id="@+id/recyclerViewNotes"
-                        android:scrollbars="vertical"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
                 <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="240dp"
@@ -115,7 +109,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@color/colorPrimary"
-                        android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         android:text="@string/button_location"
                         android:textColor="@color/colorWhite"
@@ -133,6 +126,17 @@
                         android:textColor="@color/colorWhite"
                         android:textSize="16sp"/>
 
+                <Button
+                        android:id="@+id/viewNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:background="@color/colorPrimary"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/button_view_notes"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"/>
                 <Button
                         android:id="@+id/btnAdd"
                         android:layout_width="match_parent"
