@@ -1,33 +1,36 @@
 package org.wit.archaeologicalfieldwork.activities
 
-import android.app.DatePickerDialog
-import android.app.FragmentManager
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.os.Bundle
 import android.widget.DatePicker
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_hillfort.*
 import org.jetbrains.anko.*
-import org.w3c.dom.Text
 import org.wit.archaeologicalfieldwork.R
-import org.wit.archaeologicalfieldwork.helpers.readImage
-import org.wit.archaeologicalfieldwork.helpers.readImageFromPath
+import org.wit.archaeologicalfieldwork.adapters.ImageAdapter
+import org.wit.archaeologicalfieldwork.adapters.ImageListener
 import org.wit.archaeologicalfieldwork.helpers.showImagePicker
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Location
 import org.wit.archaeologicalfieldwork.models.Visit
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.xml.datatype.DatatypeConstants.MONTHS
 
-class HillfortActivity : AppCompatActivity(), AnkoLogger {
+class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
 
-    val IMAGE_REQUEST = 1
-    val LOCATION_REQUEST = 2
-    val TIME_REQUEST = 3
+    override fun onImageClick(image: String) {
+        editedImage = image
+        showImagePicker(this, IMAGE_EDIT_REQUEST)
+    }
+
+    val ADD_IMAGE_REQUEST = 1
+    val IMAGE_EDIT_REQUEST = 2
+    val LOCATION_REQUEST = 3
+
+    lateinit var editedImage: String
+
     var hillfort = Hillfort()
     lateinit var app : MainApp
 
@@ -35,6 +38,9 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hillfort)
         app = application as MainApp
+
+        val layoutManager = LinearLayoutManager(this)
+        recyclerViewImages.layoutManager = layoutManager
 
         cancel.setOnClickListener{
             info("Cancel pressed")
@@ -52,16 +58,11 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
                 visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(visit.date))
             }
             visitedCheckBox.isChecked = visit != null
-            try{
-                hillfortImage.setImageBitmap(readImageFromPath(this, hillfort.images.first()))
-            }catch (e: Exception){
-
-            }
             btnAdd.setText(R.string.button_editHillfort)
-            chooseImage.setText(R.string.button_editImage)
+            //chooseImage.setText(R.string.button_editImage)
             editing = true
+            showImages(hillfort.images)
         }
-
 
         var date: Date? = null
 
@@ -121,7 +122,7 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
         }
 
         chooseImage.setOnClickListener {
-            showImagePicker(this, IMAGE_REQUEST)
+            showImagePicker(this, ADD_IMAGE_REQUEST)
         }
 
         hillfortLocation.setOnClickListener {
@@ -140,11 +141,19 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        showImages(hillfort.images)
         when(requestCode){
-            IMAGE_REQUEST -> {
+            ADD_IMAGE_REQUEST -> {
                 if(data != null){
                     hillfort.images.add(data.data.toString())
-                    hillfortImage.setImageBitmap(readImage(this, resultCode, data))
+                }
+            }
+            IMAGE_EDIT_REQUEST -> {
+                if(data != null){
+                    hillfort.images[hillfort.images.indexOf(editedImage)] = data.data.toString()
+                }
+                else{
+                    hillfort.images.remove(editedImage)
                 }
             }
             LOCATION_REQUEST -> {
@@ -153,6 +162,11 @@ class HillfortActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         }
+    }
+
+    fun showImages(images: List<String>){
+        recyclerViewImages.adapter = ImageAdapter(images, this)
+        recyclerViewImages.adapter?.notifyDataSetChanged()
     }
 
     private fun simplifyDate(date: Date) : String{
