@@ -33,6 +33,10 @@ class ListActivity : AppCompatActivity(), HillfortListener {
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         loadForts()
+
+        settings.setOnClickListener {
+            startActivity(intentFor<SettingsActivity>())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

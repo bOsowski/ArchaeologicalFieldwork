@@ -33,4 +33,5 @@
     <string name="visited">Visited</string>
 
     <string name="visited_time">Visited on %1$s.</string>
+    <string name="title_activity_settings">Settings</string>
 </resources>
