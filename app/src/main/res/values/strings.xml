@@ -40,4 +40,8 @@
     <string name="hillforts_added_settings">Hillforts added: %1$s.</string>
     <string name="hillforts_visited_settings">Hillforts visited: %1$s.</string>
     <string name="save_user_settings">Save User</string>
+    <string name="title_activity_notes">NotesActivity</string>
+    <string name="noteAddedBy">Added By: example@email.com</string>
+    <string name="noteAddedOn">Added On: October 24 2018</string>
+    <string name="noteEditedOn">Edited on October 4 2018</string>
 </resources>
