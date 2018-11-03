@@ -17,11 +17,12 @@ import org.wit.archaeologicalfieldwork.models.Hillfort
 
 class ListActivity : AppCompatActivity(), HillfortListener {
 
+    lateinit var app: MainApp
+
     override fun onHillfortClick(hillfort: Hillfort) {
+        app.currentFort = hillfort
         startActivityForResult(intentFor<HillfortActivity>().putExtra("hillfort_edit", hillfort), 0)
     }
-
-    lateinit var app: MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -46,7 +47,10 @@ class ListActivity : AppCompatActivity(), HillfortListener {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.item_add -> startActivityForResult<HillfortActivity>(0)
+            R.id.item_add -> {
+                app.currentFort = Hillfort()
+                startActivityForResult<HillfortActivity>(0)
+             }
         }
         return super.onOptionsItemSelected(item)
     }

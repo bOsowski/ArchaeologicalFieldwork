@@ -48,8 +48,6 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
             app.currentFort.notes.remove(note)
             showNotes(app.currentFort.notes)
         }
-
-        app.forts.update(app.currentFort)
         alert.show()
     }
 

@@ -42,6 +42,8 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
         val layoutManager = LinearLayoutManager(this)
         recyclerViewImages.layoutManager = layoutManager
 
+        info("Current hillfort = ${app.currentFort.toString()}")
+
         cancel.setOnClickListener{
             info("Cancel pressed")
             finish()
@@ -50,7 +52,7 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
         var editing = false
 
         if (intent.hasExtra("hillfort_edit")) {
-            app.currentFort = intent.extras.getParcelable("hillfort_edit")
+           // app.currentFort = intent.extras.getParcelable("hillfort_edit")
             hillfortName.setText(app.currentFort.name)
             hillfortDescription.setText(app.currentFort.description)
             val visit = app.currentFort.visits.find { it.userId == app.currentUser.id }
@@ -59,7 +61,6 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
             }
             visitedCheckBox.isChecked = visit != null
             btnAdd.setText(R.string.button_editHillfort)
-            //chooseImage.setText(R.string.button_editImage)
             editing = true
             showImages(app.currentFort.images)
         }
@@ -135,6 +136,7 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
 
         delete.setOnClickListener {
             app.forts.delete(app.currentFort)
+            app.currentFort = Hillfort()
             finish()
         }
 

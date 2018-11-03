@@ -16,9 +16,9 @@ class MainApp : Application(), AnkoLogger{
         super.onCreate()
         users = UserJSONStore(applicationContext)
         forts = HillfortJSONStore(applicationContext)
-        var hillfort = Hillfort()
-        hillfort.name = "Nice hillfort"
-        hillfort.description = "it's very nice."
-        forts.create(hillfort)
+//        var hillfort = Hillfort()
+//        hillfort.name = "Nice hillfort"
+//        hillfort.description = "it's very nice."
+//        forts.create(hillfort)
     }
 }

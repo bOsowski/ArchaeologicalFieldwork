@@ -1,8 +1,10 @@
 package org.wit.archaeologicalfieldwork.models.stores
 
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.wit.archaeologicalfieldwork.models.Hillfort
 
-open class HillfortMemStore : Store<Hillfort>{
+open class HillfortMemStore : Store<Hillfort>, AnkoLogger{
 
     var hillforts = mutableListOf<Hillfort>()
 
@@ -11,6 +13,7 @@ open class HillfortMemStore : Store<Hillfort>{
     }
 
     override fun create(item: Hillfort) {
+        item.id = getId()
         hillforts.add(item)
     }
 
@@ -23,6 +26,7 @@ open class HillfortMemStore : Store<Hillfort>{
             foundHillfort.name = item.name
             foundHillfort.notes = item.notes
             foundHillfort.visits = item.visits
+            info("Updated hillfort = ${foundHillfort}")
         }
     }
 
