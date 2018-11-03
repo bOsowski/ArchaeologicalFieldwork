@@ -9,7 +9,7 @@ import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.models.Note
 import org.wit.archaeologicalfieldwork.models.User
 
-class NoteAdapter constructor(private var notes: List<Note>, private var users: List<User>,
+class NoteAdapter constructor(private var notes: List<Note>, private var users: List<User>, private var currentUser: User,
                               private val listener: NoteListener) : RecyclerView.Adapter<NoteAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -18,17 +18,20 @@ class NoteAdapter constructor(private var notes: List<Note>, private var users: 
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val note = notes[holder.adapterPosition]
-        holder.bind(note, users, listener)
+        holder.bind(note, users, currentUser, listener)
     }
 
     override fun getItemCount(): Int = notes.size
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(note: Note, users: List<User>,  listener : NoteListener) {
+        fun bind(note: Note, users: List<User>, currentUser: User,  listener : NoteListener) {
             itemView.noteAddedOn.text = "Added on ${note.creationDate}"
             itemView.noteEditedOn.text = "Last edited on ${note.lastEdited}"
             itemView.noteAddedBy.text = "Added by ${users.find { it.id == note.userId }?.email}"
+            if(note.userId == currentUser.id) {
+                itemView.setBackgroundResource(R.color.colorGray)
+            }
             itemView.noteText.text = note.text
             itemView.setOnClickListener { listener.onNoteClick(note) }
         }

@@ -29,6 +29,10 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     lateinit var app: MainApp
 
     override fun onNoteClick(note: Note) {
+        if(app.currentUser.id != note.userId){
+            return
+        }
+
         val alert = AlertDialog.Builder(this)
 
         alert.setTitle("Edit Node")
@@ -81,7 +85,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     }
 
     fun showNotes(notes: List<Note>){
-        recyclerViewNotes.adapter = NoteAdapter(notes, app.users.findAll(), this)
+        recyclerViewNotes.adapter = NoteAdapter(notes, app.users.findAll(), app.currentUser, this)
         recyclerViewNotes.adapter?.notifyDataSetChanged()
     }
 
