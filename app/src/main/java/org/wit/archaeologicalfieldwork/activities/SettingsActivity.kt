@@ -25,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         var addedHillforts = 0
         var visitedHillforts = 0
 
-        app.forts.findAll().forEach {
+        app.data.findAll().hillforts.forEach {
             if (it.addedBy == user.id){
                 addedHillforts++
             }
@@ -51,7 +51,7 @@ class SettingsActivity : AppCompatActivity() {
         save_user_settings.setOnClickListener {
             user.email = email.text.toString()
             user.password = password.text.toString()
-            app.users.update(user)
+            app.data.update(user)
         }
     }
 

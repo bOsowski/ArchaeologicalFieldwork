@@ -61,7 +61,7 @@ class ListActivity : AppCompatActivity(), HillfortListener {
     }
 
     private fun loadForts(){
-        showForts(app.forts.findAll())
+        showForts(app.data.findAll().hillforts)
     }
 
     fun showForts(hillforts: List<Hillfort>){

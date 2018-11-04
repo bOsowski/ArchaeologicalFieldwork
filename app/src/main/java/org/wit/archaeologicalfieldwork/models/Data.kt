@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Data(
-    var users: ArrayList<User>,
-    var hillforts: ArrayList<Hillfort>
+    var users: ArrayList<User> = ArrayList(),
+    var hillforts: ArrayList<Hillfort> = ArrayList()
 ) : Parcelable

@@ -85,7 +85,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     }
 
     fun showNotes(notes: List<Note>){
-        recyclerViewNotes.adapter = NoteAdapter(notes, app.users.findAll(), app.currentUser, this)
+        recyclerViewNotes.adapter = NoteAdapter(notes, app.data.findAll().users, app.currentUser, this)
         recyclerViewNotes.adapter?.notifyDataSetChanged()
     }
 

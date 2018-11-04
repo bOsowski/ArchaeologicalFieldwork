@@ -114,7 +114,7 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
                 app.currentFort.visits.remove(app.currentFort.visits.find { it.userId == app.currentUser.id })
             }
             if (app.currentFort.name.isNotEmpty()) {
-                if(editing) app.forts.update(app.currentFort.copy()) else app.forts.create(app.currentFort.copy())
+                if(editing) app.data.update(app.currentFort.copy()) else app.data.create(app.currentFort.copy())
                 setResult(AppCompatActivity.RESULT_OK)
                 finish()
             }else{
@@ -135,7 +135,7 @@ class HillfortActivity : AppCompatActivity(), ImageListener, AnkoLogger {
         }
 
         delete.setOnClickListener {
-            app.forts.delete(app.currentFort)
+            app.data.delete(app.currentFort)
             app.currentFort = Hillfort()
             finish()
         }

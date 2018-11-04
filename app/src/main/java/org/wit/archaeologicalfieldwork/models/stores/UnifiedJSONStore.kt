@@ -18,7 +18,6 @@ class UnifiedJSONStore: AnkoLogger {
 
     val JSON_FILE = "data.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-    val listType = object : TypeToken<ArrayList<Hillfort>>() {}.type
     val context: Context
     lateinit var data: Data
 
@@ -26,6 +25,9 @@ class UnifiedJSONStore: AnkoLogger {
         this.context = context
         if (exists(context, JSON_FILE)) {
             deserialize()
+        }
+        else{
+            data = Data()
         }
     }
 
@@ -92,12 +94,12 @@ class UnifiedJSONStore: AnkoLogger {
     }
 
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(data, listType)
+        val jsonString = gsonBuilder.toJson(data, Data::class.java)
         write(context, JSON_FILE, jsonString)
     }
 
     fun deserialize() {
         val jsonString = read(context, JSON_FILE)
-        data = Gson().fromJson(jsonString, listType)
+        data = Gson().fromJson(jsonString, Data::class.java)
     }
 }

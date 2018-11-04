@@ -231,7 +231,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            var user: User? = app.users.findAll().find { it.email == mEmail }
+            var user: User? = app.data.findAll().users.find { it.email == mEmail }
             return when {
                 user != null && user.password == mPassword -> {
                     app.currentUser = user
@@ -248,7 +248,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                     user = User()
                     user.email = mEmail
                     user.password = mPassword
-                    app.users.create(user)
+                    app.data.create(user)
                     app.currentUser = user
                     startActivity(intentFor<ListActivity>())
                     true
