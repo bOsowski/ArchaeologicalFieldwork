@@ -24,8 +24,10 @@ class SettingsActivity : AppCompatActivity() {
 
         var addedHillforts = 0
         var visitedHillforts = 0
+        var totalHillforts = 0
 
         app.data.findAll().hillforts.forEach {
+            totalHillforts++
             if (it.addedBy == user.id){
                 addedHillforts++
             }
@@ -43,6 +45,7 @@ class SettingsActivity : AppCompatActivity() {
 
         hillforts_visited_settings.text = resources.getString(R.string.hillforts_added_settings, addedHillforts.toString())
         hillforts_added_settings.text = resources.getString(R.string.hillforts_visited_settings, visitedHillforts.toString())
+        hillforts_total.text = resources.getString(R.string.hillforts_total, totalHillforts.toString())
 
         logout.setOnClickListener {
             startActivity(intentFor<LoginActivity>())
