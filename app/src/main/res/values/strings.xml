@@ -46,4 +46,5 @@
     <string name="noteEditedOn">Edited on October 4 2018</string>
     <string name="button_view_notes">View Notes</string>
     <string name="notes_addNote">Add Note</string>
+    <string name="hillforts_total">Hillforts in database: %1$s.</string>
 </resources>
