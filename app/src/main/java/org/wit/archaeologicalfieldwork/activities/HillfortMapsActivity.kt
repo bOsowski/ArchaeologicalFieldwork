@@ -2,6 +2,7 @@ package org.wit.archaeologicalfieldwork.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -34,6 +35,8 @@ class HillfortMapsActivity : AppCompatActivity() {
             val options = MarkerOptions().title(it.name).position(LatLng(it.location.lat, it.location.lng))
             map.addMarker(options).tag = it.id
         }
+        val lastLocation = app.data.findAll().hillforts.last().location
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.lat, lastLocation.lng), lastLocation.zoom))
     }
 
     override fun onDestroy(){
