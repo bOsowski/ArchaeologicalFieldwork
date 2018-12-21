@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_list.*
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.adapters.HillfortAdapter
@@ -50,7 +51,8 @@ class ListActivity : AppCompatActivity(), HillfortListener {
             R.id.item_add -> {
                 app.currentFort = Hillfort()
                 startActivityForResult<HillfortActivity>(0)
-             }
+            }
+            R.id.item_map -> startActivity<HillfortMapsActivity>()
         }
         return super.onOptionsItemSelected(item)
     }

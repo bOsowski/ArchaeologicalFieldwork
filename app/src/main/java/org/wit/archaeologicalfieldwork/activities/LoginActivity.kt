@@ -46,14 +46,15 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         setContentView(R.layout.activity_login)
         app = application as MainApp
 
-//        //todo: remove the below
-//        startActivity(intentFor<ListActivity>())
-//        var user = User()
-//        user.email = "test@test.test"
-//        user.password = "testPassword"
-//        app.users.create(user)
-//        app.currentUser = app.users.findAll().first()
-//        finish()
+        //todo: remove the below
+        startActivity(intentFor<ListActivity>())
+        var user = User()
+        user.email = "test@test.test"
+        user.password = "testPassword"
+        app.data.create(user)
+        app.currentUser = app.data.findAll().users.first()
+        finish()
+        //todo: remove the above
 
         // Set up the login form.
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->

@@ -47,4 +47,5 @@
     <string name="button_view_notes">View Notes</string>
     <string name="notes_addNote">Add Note</string>
     <string name="hillforts_total">Hillforts in database: %1$s.</string>
+    <string name="title_activity_hillfort_maps">Map of All Hillforts</string>
 </resources>
