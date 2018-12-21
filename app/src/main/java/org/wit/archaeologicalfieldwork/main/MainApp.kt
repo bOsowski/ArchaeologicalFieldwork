@@ -13,6 +13,6 @@ class MainApp : Application(), AnkoLogger{
 
     override fun onCreate() {
         super.onCreate()
-        data = UnifiedMemStore()/*UnifiedJSONStore(applicationContext)*/
+        data = /*UnifiedMemStore()*/UnifiedJSONStore(applicationContext)
     }
 }

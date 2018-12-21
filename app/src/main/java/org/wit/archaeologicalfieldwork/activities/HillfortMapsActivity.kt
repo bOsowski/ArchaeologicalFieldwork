@@ -5,14 +5,16 @@ import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 import kotlinx.android.synthetic.main.activity_hillfort_maps.*
 import kotlinx.android.synthetic.main.content_hillfort_maps.*
 import org.wit.archaeologicalfieldwork.R
+import org.wit.archaeologicalfieldwork.helpers.readImageFromPath
 import org.wit.archaeologicalfieldwork.main.MainApp
 
-class HillfortMapsActivity : AppCompatActivity() {
+class HillfortMapsActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
 
     lateinit var map: GoogleMap
     lateinit var app: MainApp
@@ -34,9 +36,19 @@ class HillfortMapsActivity : AppCompatActivity() {
         app.data.findAll().hillforts.forEach{
             val options = MarkerOptions().title(it.name).position(LatLng(it.location.lat, it.location.lng))
             map.addMarker(options).tag = it.id
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.location.lat, it.location.lng), it.location.zoom))
+            map.setOnMarkerClickListener(this)
         }
-        val lastLocation = app.data.findAll().hillforts.last().location
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.lat, lastLocation.lng), lastLocation.zoom))
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        currentTitle.text = marker.title
+        val foundHillfort = app.data.findAll().hillforts.find{ it.id == marker.tag }
+        if(foundHillfort != null && !foundHillfort.images.isEmpty()){
+            hillfortMapImage.setImageBitmap(readImageFromPath(this, foundHillfort.images.first()))
+        }
+        hillfortMapDescription.text = foundHillfort?.description
+        return false
     }
 
     override fun onDestroy(){
