@@ -11,15 +11,13 @@ import org.wit.archaeologicalfieldwork.helpers.write
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import java.util.ArrayList
 
-class HillfortJSONStore : HillfortMemStore{
+class HillfortJSONStore(val context: Context) : HillfortMemStore() {
 
     val JSON_FILE = "hillforts.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
     val listType = object : TypeToken<ArrayList<Hillfort>>() {}.type
-    val context: Context
 
-    constructor (context: Context) {
-        this.context = context
+    init {
         if (exists(context, JSON_FILE)) {
             deserialize()
         }

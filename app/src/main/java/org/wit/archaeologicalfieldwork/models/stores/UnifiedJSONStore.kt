@@ -3,26 +3,20 @@ package org.wit.archaeologicalfieldwork.models.stores
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.wit.archaeologicalfieldwork.helpers.exists
 import org.wit.archaeologicalfieldwork.helpers.read
 import org.wit.archaeologicalfieldwork.helpers.write
 import org.wit.archaeologicalfieldwork.models.Data
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.User
-import java.util.ArrayList
 
-class UnifiedJSONStore: AnkoLogger {
+class UnifiedJSONStore(val context: Context) : UnifiedMemStore(), AnkoLogger {
 
     val JSON_FILE = "data.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-    val context: Context
-    lateinit var data: Data
 
-    constructor (context: Context) {
-        this.context = context
+    init {
         if (exists(context, JSON_FILE)) {
             deserialize()
         }
@@ -31,65 +25,33 @@ class UnifiedJSONStore: AnkoLogger {
         }
     }
 
-    fun findAll(): Data {
-        return data
-    }
-
-
-    fun delete(item: Hillfort) {
-        data.hillforts.remove(item)
+    override fun delete(item: Hillfort) {
+        super.delete(item)
         serialize()
     }
 
-    fun create(item: Hillfort) {
-        var largestId: Long = -1
-        data.hillforts.forEach{
-            if(largestId < it.id){
-                largestId = it.id
-            }
-        }
-        item.id = largestId+1
-        data.hillforts.add(item)
+    override fun create(item: Hillfort) {
+        super.create(item)
         serialize()
     }
 
-    fun update(item: Hillfort) {
-        val foundHillfort: Hillfort? = data.hillforts.find { u -> u.id == item.id }
-        if (foundHillfort != null) {
-            foundHillfort.description = item.description
-            foundHillfort.images = item.images
-            foundHillfort.location = item.location
-            foundHillfort.name = item.name
-            foundHillfort.notes = item.notes
-            foundHillfort.visits = item.visits
-            info("Updated hillfort = ${foundHillfort}")
-        }
+    override fun update(item: Hillfort) {
+        super.update(item)
         serialize()
     }
 
-    fun delete(item: User) {
-        data.users.remove(item)
+    override fun delete(item: User) {
+        super.delete(item)
         serialize()
     }
 
-    fun create(item: User) {
-        var largestId: Long = -1
-        data.users.forEach{
-            if(largestId < it.id){
-                largestId = it.id
-            }
-        }
-        item.id = largestId+1
-        data.users.add(item)
+    override fun create(item: User) {
+        super.create(item)
         serialize()
     }
 
-    fun update(item: User) {
-        val foundUser: User? = data.users.find { u -> u.id == item.id }
-        if (foundUser != null) {
-            foundUser.email = item.email
-            foundUser.password = item.password
-        }
+    override fun update(item: User) {
+        super.update(item)
         serialize()
     }
 
@@ -98,8 +60,9 @@ class UnifiedJSONStore: AnkoLogger {
         write(context, JSON_FILE, jsonString)
     }
 
-    fun deserialize() {
+    private fun deserialize() {
         val jsonString = read(context, JSON_FILE)
+        println(jsonString)
         data = Gson().fromJson(jsonString, Data::class.java)
     }
 }
