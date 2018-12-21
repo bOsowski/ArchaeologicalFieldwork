@@ -10,15 +10,13 @@ import org.wit.archaeologicalfieldwork.helpers.write
 import org.wit.archaeologicalfieldwork.models.User
 import java.util.ArrayList
 
-class UserJSONStore : UserMemStore{
+class UserJSONStore(val context: Context) : UserMemStore() {
 
     val JSON_FILE = "users.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
     val listType = object : TypeToken<ArrayList<User>>() {}.type
-    val context: Context
 
-    constructor (context: Context) {
-        this.context = context
+    init {
         if (exists(context, JSON_FILE)) {
             deserialize()
         }
