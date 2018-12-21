@@ -7,12 +7,12 @@ import org.wit.archaeologicalfieldwork.models.stores.*
 
 class MainApp : Application(), AnkoLogger{
 
-    lateinit var data: UnifiedJSONStore
+    lateinit var data: UnifiedMemStore
     lateinit var currentUser: User
     lateinit var currentFort: Hillfort
 
     override fun onCreate() {
         super.onCreate()
-        data = UnifiedJSONStore(applicationContext)
+        data = UnifiedMemStore()/*UnifiedJSONStore(applicationContext)*/
     }
 }

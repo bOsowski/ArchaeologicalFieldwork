@@ -6,7 +6,7 @@ import org.wit.archaeologicalfieldwork.models.Data
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.User
 
-abstract class UnifiedMemStore: AnkoLogger{
+open class UnifiedMemStore: AnkoLogger{
 
     var data: Data = Data()
 
