@@ -33,11 +33,11 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".activities.ListActivity"
+                android:name=".views.hillfortList.HillfortListView"
                 android:label="@string/title_activity_main"
                 android:theme="@style/AppTheme">
         </activity>
-        <activity android:name=".activities.HillfortActivity">
+        <activity android:name=".views.hillfort.HillfortView">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -52,7 +52,7 @@
                 android:value="@string/google_maps_key"/>
 
         <activity
-                android:name=".activities.MapsActivity"
+                android:name=".views.editLocation.EditLocationView"
                 android:label="@string/title_activity_maps">
         </activity>
         <activity
@@ -65,7 +65,7 @@
                 android:theme="@style/AppTheme">
         </activity>
         <activity
-                android:name=".activities.HillfortMapsActivity"
+                android:name=".views.hillfortMaps.HillfortMapsView"
                 android:label="@string/title_activity_hillfort_maps"
                 android:theme="@style/AppTheme">
         </activity>

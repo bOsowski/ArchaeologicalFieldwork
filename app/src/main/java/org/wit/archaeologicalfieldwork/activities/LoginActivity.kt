@@ -28,6 +28,7 @@ import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.models.User
+import org.wit.archaeologicalfieldwork.views.hillfortList.HillfortListView
 
 /**
  * A login screen that offers login via email/password.
@@ -47,7 +48,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         app = application as MainApp
 
         //todo: remove the below
-        startActivity(intentFor<ListActivity>())
+        startActivity(intentFor<HillfortListView>())
         var user = User()
         user.email = "test@test.test"
         user.password = "testPassword"
@@ -237,7 +238,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                 user != null && user.password == mPassword -> {
                     app.currentUser = user
                     info("User tried to log in with $mEmail, $mPassword. User found and password matching.")
-                    startActivity(intentFor<ListActivity>())
+                    startActivity(intentFor<HillfortListView>())
                     true
                 }
                 user != null -> {
@@ -251,7 +252,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                     user.password = mPassword
                     app.data.create(user)
                     app.currentUser = user
-                    startActivity(intentFor<ListActivity>())
+                    startActivity(intentFor<HillfortListView>())
                     true
                 }
             }

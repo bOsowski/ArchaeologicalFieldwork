@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_hillfort_maps"
-        tools:context=".activities.HillfortMapsActivity">
+        tools:context=".views.hillfortMaps.HillfortMapsView">
 
     <android.support.v7.widget.CardView
             android:id="@+id/cardView"
