@@ -15,12 +15,10 @@ class HillfortListPresenter(private val view: HillfortListView){
     fun getHillforts() = app.data.findAll().hillforts
 
     fun doAddHillfort(){
-        app.currentFort = Hillfort()
         view.startActivityForResult<HillfortView>(0)
     }
 
     fun doEditHillfort(hillfort: Hillfort){
-        app.currentFort = hillfort
         view.startActivityForResult(view.intentFor<HillfortView>().putExtra("hillfort_edit", hillfort), 0)
     }
 

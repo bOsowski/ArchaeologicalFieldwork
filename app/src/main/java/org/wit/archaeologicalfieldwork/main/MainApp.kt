@@ -9,7 +9,7 @@ class MainApp : Application(), AnkoLogger{
 
     lateinit var data: UnifiedMemStore
     lateinit var currentUser: User
-    lateinit var currentFort: Hillfort
+//    lateinit var currentFort: Hillfort
 
     override fun onCreate() {
         super.onCreate()

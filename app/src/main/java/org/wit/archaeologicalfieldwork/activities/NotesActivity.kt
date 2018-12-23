@@ -1,6 +1,5 @@
 package org.wit.archaeologicalfieldwork.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager
@@ -9,24 +8,23 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_notes.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import org.jetbrains.anko.startActivityForResult
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.adapters.NoteAdapter
 import org.wit.archaeologicalfieldwork.adapters.NoteListener
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Note
-import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.widget.EditText
-import kotlinx.android.synthetic.main.activity_hillfort.view.*
-import kotlinx.android.synthetic.main.card_note.*
+import org.jetbrains.anko.intentFor
+import org.wit.archaeologicalfieldwork.views.hillfort.HillfortView
 import java.util.*
 
 
 class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
 
     lateinit var app: MainApp
+    lateinit var hillfort: Hillfort
 
     override fun onNoteClick(note: Note) {
         if(app.currentUser.id != note.userId){
@@ -45,12 +43,12 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
             note.text = input.text.toString()
             note.lastEdited = Date()
             info("Set text to ${note.text}")
-            showNotes(app.currentFort.notes)
+            showNotes(hillfort.notes)
         }
 
         alert.setNegativeButton("Delete") { _, _ ->
-            app.currentFort.notes.remove(note)
-            showNotes(app.currentFort.notes)
+            hillfort.notes.remove(note)
+            showNotes(hillfort.notes)
         }
         alert.show()
     }
@@ -59,12 +57,13 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
         app = application as MainApp
+        hillfort = intent.getParcelableExtra("hillfort_data")
         setSupportActionBar(toolbarNotes)
 
         val layoutManager = LinearLayoutManager(this)
         recyclerViewNotes.layoutManager = layoutManager
 
-        showNotes(app.currentFort.notes)
+        showNotes(hillfort.notes)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -72,11 +71,16 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
             R.id.note_add -> {
                 var note = Note()
                 note.userId = app.currentUser.id
-                app.currentFort.notes.add(note)
-                showNotes(app.currentFort.notes)
+                hillfort.notes.add(note)
+                showNotes(hillfort.notes)
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        startActivity(intentFor<HillfortView>().putExtra("hillfort_edit", hillfort))
+        finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -84,7 +88,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun showNotes(notes: List<Note>){
+    private fun showNotes(notes: List<Note>){
         recyclerViewNotes.adapter = NoteAdapter(notes, app.data.findAll().users, app.currentUser, this)
         recyclerViewNotes.adapter?.notifyDataSetChanged()
     }
