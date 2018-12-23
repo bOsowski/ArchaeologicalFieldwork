@@ -18,6 +18,7 @@
     <string name="select_hillfort_image">Select hillfort image</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
     <string name="button_location">Set Location</string>
     <string name="button_addImage">Add Image</string>
     <string name="button_addHillfort">Add Hillfort</string>

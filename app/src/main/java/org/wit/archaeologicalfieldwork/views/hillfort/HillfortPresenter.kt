@@ -31,7 +31,6 @@ class HillfortPresenter(private val view: HillfortView){
 
     init{
         if (view.intent.hasExtra("hillfort_edit")) {
-//            app.currentFort = view.intent.extras.getParcelable("hillfort_edit")
             view.hillfortName.setText(app.currentFort.name)
             view.hillfortDescription.setText(app.currentFort.description)
             val visit = app.currentFort.visits.find { it.userId == app.currentUser.id }
@@ -39,7 +38,6 @@ class HillfortPresenter(private val view: HillfortView){
                 view.visitedCheckBox.text = view.resources.getString(R.string.visited_time, simplifyDate(visit.date))
             }
             view.visitedCheckBox.isChecked = visit != null
-            view.btnAdd.setText(R.string.button_editHillfort)
             editing = true
             showImages(app.currentFort.images)
         }

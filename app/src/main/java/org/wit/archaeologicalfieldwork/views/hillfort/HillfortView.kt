@@ -35,7 +35,7 @@ class HillfortView : AppCompatActivity(), ImageListener, AnkoLogger {
             presenter.doSetVisited()
         }
 
-        btnAdd.setOnClickListener {
+        btnSave.setOnClickListener {
             presenter.doAddOrSave()
         }
 
