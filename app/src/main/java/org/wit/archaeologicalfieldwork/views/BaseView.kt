@@ -20,12 +20,12 @@ enum class VIEW {
     LOCATION, HILLFORT, MAPS, LIST
 }
 
-open abstract class BaseView : AppCompatActivity(), AnkoLogger, ImageListener {
+abstract class BaseView : AppCompatActivity(), AnkoLogger, ImageListener {
 
     private var basePresenter: BasePresenter? = null
 
     fun navigateTo(view: VIEW, code: Int = 0, key: String = "", value: Parcelable? = null){
-        var intent: Intent = when(view){
+        val intent: Intent = when(view){
             VIEW.LOCATION -> Intent(this, EditLocationView::class.java)
             VIEW.HILLFORT -> Intent(this, HillfortView::class.java)
             VIEW.MAPS -> Intent(this, HillfortMapsView::class.java)

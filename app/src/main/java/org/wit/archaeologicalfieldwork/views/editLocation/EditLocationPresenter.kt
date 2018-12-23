@@ -8,8 +8,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.archaeologicalfieldwork.models.Location
+import org.wit.archaeologicalfieldwork.views.BasePresenter
 
-class EditLocationPresenter(private val view: EditLocationView){
+class EditLocationPresenter(view: EditLocationView) : BasePresenter(view){
 
     var location = Location()
 
@@ -37,8 +38,8 @@ class EditLocationPresenter(private val view: EditLocationView){
     fun doOnBackPressed(){
         val resultIntent = Intent()
         resultIntent.putExtra("location", location)
-        view.setResult(Activity.RESULT_OK, resultIntent)
-        view.finish()
+        view?.setResult(Activity.RESULT_OK, resultIntent)
+        view?.finish()
     }
 
     fun doUpdateMarker(marker: Marker){

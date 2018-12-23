@@ -2,7 +2,6 @@ package org.wit.archaeologicalfieldwork.views.hillfortList
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -13,8 +12,9 @@ import org.wit.archaeologicalfieldwork.activities.SettingsActivity
 import org.wit.archaeologicalfieldwork.adapters.HillfortAdapter
 import org.wit.archaeologicalfieldwork.adapters.HillfortListener
 import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.wit.archaeologicalfieldwork.views.BaseView
 
-class HillfortListView : AppCompatActivity(), HillfortListener {
+class HillfortListView : BaseView(), HillfortListener {
 
    lateinit var presenter: HillfortListPresenter
 
@@ -26,9 +26,9 @@ class HillfortListView : AppCompatActivity(), HillfortListener {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hillfort_list)
-        setSupportActionBar(toolbarMain)
+        init(toolbarMain)
 
-        presenter = HillfortListPresenter(this)
+        presenter = initPresenter(HillfortListPresenter(this)) as HillfortListPresenter
 
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
@@ -56,6 +56,4 @@ class HillfortListView : AppCompatActivity(), HillfortListener {
         recyclerView.adapter?.notifyDataSetChanged()
         super.onActivityResult(requestCode, resultCode, data)
     }
-
-
 }

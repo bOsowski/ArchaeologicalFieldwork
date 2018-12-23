@@ -7,11 +7,9 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.content_hillfort_maps.*
 import org.wit.archaeologicalfieldwork.helpers.readImageFromPath
-import org.wit.archaeologicalfieldwork.main.MainApp
+import org.wit.archaeologicalfieldwork.views.BasePresenter
 
-class HillfortMapsPresenter(private val view: HillfortMapsView){
-
-    var app: MainApp = view.application as MainApp
+class HillfortMapsPresenter(view: HillfortMapsView) : BasePresenter(view){
 
     fun initMap(map: GoogleMap){
         map.uiSettings.isZoomControlsEnabled = true
@@ -19,16 +17,16 @@ class HillfortMapsPresenter(private val view: HillfortMapsView){
             val options = MarkerOptions().title(it.name).position(LatLng(it.location.lat, it.location.lng))
             map.addMarker(options).tag = it.id
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.location.lat, it.location.lng), it.location.zoom))
-            map.setOnMarkerClickListener(view)
+            map.setOnMarkerClickListener(view as HillfortMapsView)
         }
     }
 
     fun doUpdateContent(marker: Marker) {
-        view.currentTitle.text = marker.title
+        view?.currentTitle!!.text = marker.title
         val foundHillfort = app.data.findAll().hillforts.find{ it.id == marker.tag }
         if(foundHillfort != null && !foundHillfort.images.isEmpty()){
-            view.hillfortMapImage.setImageBitmap(readImageFromPath(view, foundHillfort.images.first()))
+            view?.hillfortMapImage!!.setImageBitmap(readImageFromPath(view!!, foundHillfort.images.first()))
         }
-        view.hillfortMapDescription.text = foundHillfort?.description
+        view?.hillfortMapDescription!!.text = foundHillfort?.description
     }
 }

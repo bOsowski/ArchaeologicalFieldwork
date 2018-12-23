@@ -1,14 +1,14 @@
 package org.wit.archaeologicalfieldwork.views.hillfortMaps
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import kotlinx.android.synthetic.main.activity_hillfort_maps.*
 import kotlinx.android.synthetic.main.content_hillfort_maps.*
 import org.wit.archaeologicalfieldwork.R
+import org.wit.archaeologicalfieldwork.views.BaseView
 
-class HillfortMapsView : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
+class HillfortMapsView : BaseView(), GoogleMap.OnMarkerClickListener {
 
     lateinit var map: GoogleMap
     private lateinit var presenter: HillfortMapsPresenter
@@ -18,7 +18,7 @@ class HillfortMapsView : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
         setContentView(R.layout.activity_hillfort_maps)
         setSupportActionBar(toolbar)
         mapView.onCreate(savedInstanceState)
-        presenter = HillfortMapsPresenter(this)
+        presenter = initPresenter(HillfortMapsPresenter(this)) as HillfortMapsPresenter
         mapView.getMapAsync {
             map = it
             presenter.initMap(map)

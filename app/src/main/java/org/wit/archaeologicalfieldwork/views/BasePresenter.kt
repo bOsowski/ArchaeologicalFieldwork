@@ -20,5 +20,6 @@ open class BasePresenter(var view: BaseView?) {
     }
 
     open fun doEditImage(image: String) {
+
     }
 }

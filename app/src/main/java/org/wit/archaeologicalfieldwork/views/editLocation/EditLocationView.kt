@@ -1,20 +1,19 @@
 package org.wit.archaeologicalfieldwork.views.editLocation
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import org.jetbrains.anko.AnkoLogger
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.models.Location
+import org.wit.archaeologicalfieldwork.views.BaseView
 
-class EditLocationView : AppCompatActivity(), GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener, AnkoLogger {
+class EditLocationView : BaseView(), GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
 
     private lateinit var presenter: EditLocationPresenter
+    var location = Location()
     private lateinit var map: GoogleMap
 
     override fun onMarkerClick(marker: Marker): Boolean {
@@ -33,7 +32,6 @@ class EditLocationView : AppCompatActivity(), GoogleMap.OnMarkerDragListener, Go
         presenter.doUpdateLocation(marker.position.latitude, marker.position.longitude, map.cameraPosition.zoom)
     }
 
-    var location = Location()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +40,7 @@ class EditLocationView : AppCompatActivity(), GoogleMap.OnMarkerDragListener, Go
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
-        presenter = EditLocationPresenter(this)
+        presenter = initPresenter(EditLocationPresenter(this)) as EditLocationPresenter
         mapFragment.getMapAsync{
             map = it
             map.setOnMarkerClickListener(this)
