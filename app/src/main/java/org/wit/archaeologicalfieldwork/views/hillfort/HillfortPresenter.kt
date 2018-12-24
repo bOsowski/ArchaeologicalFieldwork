@@ -48,8 +48,6 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             } else{
               locationUpdate(defaultLocation.lat, defaultLocation.lng)
             }
-//            hillfort.location.lat = defaultLocation.lat
-//            hillfort.location.lng = defaultLocation.lng
         }
     }
 
@@ -147,7 +145,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
                     view?.visitedCheckBox!!.text = view?.resources!!.getString(R.string.visited_time, simplifyDate(date!!))
                 }
                 noButton {
-                    view?.visitedCheckBox!!.text = null //resources.getString(R.string.visited_time, simplifyDate(Date()))
+                    view?.visitedCheckBox!!.text = null
                 }
             }?.show()
         }
@@ -160,8 +158,9 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
         hillfort.location.lat = lat
         hillfort.location.lng = lng
         hillfort.location.zoom = 15f
+        view?.hillfortLat?.text = view?.resources!!.getString(R.string.hillfortLat, lat)
+        view?.hillfortLng?.text = view?.resources!!.getString(R.string.hillfortLng, lng)
         map?.clear()
-        //map?.uiSettings?.setAllGesturesEnabled(false)
         map?.uiSettings?.isZoomControlsEnabled = true
         val options = MarkerOptions().title(hillfort.name).position(LatLng(lat, lng))
         map?.addMarker(options)

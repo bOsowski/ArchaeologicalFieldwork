@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Archaeological Fieldwork</string>
-    <string name="opening_screen_title">Archeological Fieldwork</string>
+    <string name="opening_screen_title">Archaeological Fieldwork</string>
     <string name="opening_screen_logo_description">logo</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
@@ -13,7 +13,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
-    <string name="title_activity_main">Archeological Fieldwork</string>
+    <string name="title_activity_main">Archaeological Fieldwork</string>
 
     <string name="select_hillfort_image">Select hillfort image</string>
     <string name="delete">Delete</string>
@@ -50,4 +50,6 @@
     <string name="hillforts_total">Hillforts in database: %1$s.</string>
     <string name="title_activity_hillfort_maps">Map of All Hillforts</string>
     <string name="hillfort_image">Hillfort Image</string>
+    <string name="hillfortLat">Lat: %1$.5f</string>
+    <string name="hillfortLng">Lng: %1$.5f</string>
 </resources>

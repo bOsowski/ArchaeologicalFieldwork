@@ -70,13 +70,14 @@
             android:padding="8dp"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarAdd" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbarAdd"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/hillfortLat"/>
     <android.support.design.widget.TextInputEditText
             android:id="@+id/hillfortDescription"
             android:layout_width="0dp"
-            android:layout_height="33dp"
+            android:layout_height="wrap_content"
             android:hint="@string/hint_hillfortDescription"
             android:inputType="text"
             android:maxLength="25"
@@ -84,17 +85,19 @@
             android:padding="8dp"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/hillfortName" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/hillfortName"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/hillfortLng"/>
     <CheckBox
             android:text="@string/visited"
             android:layout_width="0dp"
-            android:layout_height="50dp" android:id="@+id/visitedCheckBox"
+            android:layout_height="0dp" android:id="@+id/visitedCheckBox"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toEndOf="@+id/viewNotes" android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/mapView2"/>
+            app:layout_constraintBottom_toBottomOf="@+id/viewNotes" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/mapView2" app:layout_constraintStart_toEndOf="@+id/viewNotes"
+            android:layout_marginStart="8dp"/>
     <Button
             android:id="@+id/chooseImage"
             android:layout_width="0dp"
@@ -103,10 +106,9 @@
             android:text="@string/button_addImage"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/viewNotes"/>
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/viewNotes" android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
     <Button
             android:id="@+id/viewNotes"
             android:layout_width="150dp"
@@ -117,22 +119,19 @@
             android:text="@string/button_view_notes"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/mapView2"/>
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/mapView2"/>
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:id="@+id/recyclerViewImages"
+            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:scrollbars="none" android:maxHeight="150dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/chooseImage"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/recycler_view_item" tools:itemCount="3"/>
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/chooseImage"/>
     <com.google.android.gms.maps.MapView
             android:layout_width="0dp"
             android:layout_height="150dp"
@@ -140,6 +139,20 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/hillfortDescription"/>
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/hillfortDescription"/>
+    <TextView
+            android:text="@string/hillfortLat"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/hillfortLat" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/toolbarAdd"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/hillfortName"/>
+    <TextView
+            android:text="@string/hillfortLng"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/hillfortLng" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/hillfortDescription"
+            app:layout_constraintTop_toTopOf="@+id/hillfortDescription"/>
 </android.support.constraint.ConstraintLayout>
