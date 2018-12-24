@@ -50,6 +50,6 @@
     <string name="hillforts_total">Hillforts in database: %1$s.</string>
     <string name="title_activity_hillfort_maps">Map of All Hillforts</string>
     <string name="hillfort_image">Hillfort Image</string>
-    <string name="hillfortLat">Lat: %1$.5f</string>
-    <string name="hillfortLng">Lng: %1$.5f</string>
+    <string name="hillfortLat">Lat: %1$.6f</string>
+    <string name="hillfortLng">Lng: %1$.6f</string>
 </resources>

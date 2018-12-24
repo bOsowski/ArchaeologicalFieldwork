@@ -28,7 +28,7 @@ class HillfortView : BaseView(), AnkoLogger {
                 presenter.doSetLocation()
             }
             presenter.doConfigureMap(map)
-            mapView2.onResume() //this line fixes a bug where the map would not properly load.
+            //mapView2.onResume() //this line fixes a bug where the map would not properly load.
         }
 //        The title would obstruct buttons for this view.
 //        toolbarAdd.title = title
@@ -80,5 +80,11 @@ class HillfortView : BaseView(), AnkoLogger {
     fun showImages(images: List<String>){
         recyclerViewImages.adapter = ImageAdapter(images, this)
         recyclerViewImages.adapter?.notifyDataSetChanged()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView2.onResume()
+        presenter.doResartLocationUpdates()
     }
 }
