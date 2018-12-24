@@ -132,13 +132,21 @@
             app:layout_constraintStart_toStartOf="@+id/chooseImage"/>
 
     <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="381dp"
+            android:layout_height="151dp"
             android:id="@+id/recyclerViewImages"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/visitedCheckBox" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"/>
+    <com.google.android.gms.maps.MapView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/mapView2" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewImages" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 </android.support.constraint.ConstraintLayout>

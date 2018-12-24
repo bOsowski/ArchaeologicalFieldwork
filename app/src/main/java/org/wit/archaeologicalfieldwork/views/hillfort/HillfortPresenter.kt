@@ -3,6 +3,10 @@ package org.wit.archaeologicalfieldwork.views.hillfort
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.widget.DatePicker
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_hillfort.*
 import org.jetbrains.anko.*
 import org.wit.archaeologicalfieldwork.R
@@ -25,12 +29,16 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     private var editing: Boolean = false
     var date: Date? = null
     var hillfort = Hillfort()
+    var map: GoogleMap? = null
 
     init{
         if (view.intent.hasExtra("hillfort_edit")) {
             editing = true
             hillfort = view.intent.extras.getParcelable("hillfort_edit")
             view.showHillfort(hillfort)
+        } else{
+            hillfort.location.lat = defaultLocation.lat
+            hillfort.location.lng = defaultLocation.lng
         }
     }
 
@@ -102,6 +110,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             LOCATION_REQUEST -> {
                 if (data != null) {
                     hillfort.location = data.extras.getParcelable("location")
+                    locationUpdate(hillfort.location.lat, hillfort.location.lng)
                 }
             }
         }
@@ -140,6 +149,22 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
         }
     }
 
+    fun locationUpdate(lat: Double, lng: Double){
+        hillfort.location.lat = lat
+        hillfort.location.lng = lng
+        hillfort.location.zoom = 15f
+        map?.clear()
+        map?.uiSettings?.isZoomControlsEnabled = true
+        val options = MarkerOptions().title(hillfort.name).position(LatLng(lat, lng))
+        map?.addMarker(options)
+        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), hillfort.location.zoom))
+        view?.showHillfort(hillfort)
+    }
+
+    fun doConfigureMap(map: GoogleMap) {
+        this.map = map
+        locationUpdate(hillfort.location.lat, hillfort.location.lng)
+    }
 
 
 }

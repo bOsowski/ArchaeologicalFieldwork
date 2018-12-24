@@ -3,6 +3,7 @@ package org.wit.archaeologicalfieldwork.views.hillfort
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.os.Bundle
+import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_hillfort.*
 import org.jetbrains.anko.*
 import org.wit.archaeologicalfieldwork.R
@@ -16,10 +17,16 @@ import org.wit.archaeologicalfieldwork.views.BaseView
 class HillfortView : BaseView(), AnkoLogger {
 
     private lateinit var presenter: HillfortPresenter
+    lateinit var map: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hillfort)
+        mapView2.onCreate(savedInstanceState)
+        mapView2.getMapAsync {
+            map = it
+            presenter.doConfigureMap(map)
+        }
 //        The title would obstruct buttons for this view.
 //        toolbarAdd.title = title
 //        setSupportActionBar(toolbarAdd)
