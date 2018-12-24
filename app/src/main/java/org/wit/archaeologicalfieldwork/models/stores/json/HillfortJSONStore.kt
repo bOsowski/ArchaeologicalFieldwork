@@ -1,27 +1,25 @@
-package org.wit.archaeologicalfieldwork.models.stores
+package org.wit.archaeologicalfieldwork.models.stores.json
 
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.jetbrains.anko.AnkoLogger
+import com.google.gson.reflect.TypeToken
 import org.wit.archaeologicalfieldwork.helpers.exists
 import org.wit.archaeologicalfieldwork.helpers.read
 import org.wit.archaeologicalfieldwork.helpers.write
-import org.wit.archaeologicalfieldwork.models.Data
 import org.wit.archaeologicalfieldwork.models.Hillfort
-import org.wit.archaeologicalfieldwork.models.User
+import org.wit.archaeologicalfieldwork.models.stores.mem.HillfortMemStore
+import java.util.ArrayList
 
-class UnifiedJSONStore(val context: Context) : UnifiedMemStore(), AnkoLogger {
+class HillfortJSONStore(val context: Context) : HillfortMemStore() {
 
-    val JSON_FILE = "data.json"
+    val JSON_FILE = "hillforts.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
+    val listType = object : TypeToken<ArrayList<Hillfort>>() {}.type
 
     init {
         if (exists(context, JSON_FILE)) {
             deserialize()
-        }
-        else{
-            data = Data()
         }
     }
 
@@ -35,34 +33,19 @@ class UnifiedJSONStore(val context: Context) : UnifiedMemStore(), AnkoLogger {
         serialize()
     }
 
+
     override fun update(item: Hillfort) {
         super.update(item)
         serialize()
     }
 
-    override fun delete(item: User) {
-        super.delete(item)
-        serialize()
-    }
-
-    override fun create(item: User) {
-        super.create(item)
-        serialize()
-    }
-
-    override fun update(item: User) {
-        super.update(item)
-        serialize()
-    }
-
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(data, Data::class.java)
+        val jsonString = gsonBuilder.toJson(hillforts, listType)
         write(context, JSON_FILE, jsonString)
     }
 
     private fun deserialize() {
         val jsonString = read(context, JSON_FILE)
-        println(jsonString)
-        data = Gson().fromJson(jsonString, Data::class.java)
+        hillforts = Gson().fromJson(jsonString, listType)
     }
 }

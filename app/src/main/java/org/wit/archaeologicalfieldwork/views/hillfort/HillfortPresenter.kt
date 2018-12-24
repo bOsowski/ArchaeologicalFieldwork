@@ -2,7 +2,7 @@ package org.wit.archaeologicalfieldwork.views.hillfort
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.DatePicker
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback

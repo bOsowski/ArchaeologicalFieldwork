@@ -1,25 +1,44 @@
-package org.wit.archaeologicalfieldwork.models.stores
+package org.wit.archaeologicalfieldwork.models.stores.json
 
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import org.jetbrains.anko.AnkoLogger
 import org.wit.archaeologicalfieldwork.helpers.exists
 import org.wit.archaeologicalfieldwork.helpers.read
 import org.wit.archaeologicalfieldwork.helpers.write
+import org.wit.archaeologicalfieldwork.models.Data
+import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.User
-import java.util.ArrayList
+import org.wit.archaeologicalfieldwork.models.stores.mem.UnifiedMemStore
 
-class UserJSONStore(val context: Context) : UserMemStore() {
+class UnifiedJSONStore(val context: Context) : UnifiedMemStore(), AnkoLogger {
 
-    val JSON_FILE = "users.json"
+    val JSON_FILE = "data.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-    val listType = object : TypeToken<ArrayList<User>>() {}.type
 
     init {
         if (exists(context, JSON_FILE)) {
             deserialize()
         }
+        else{
+            data = Data()
+        }
+    }
+
+    override fun delete(item: Hillfort) {
+        super.delete(item)
+        serialize()
+    }
+
+    override fun create(item: Hillfort) {
+        super.create(item)
+        serialize()
+    }
+
+    override fun update(item: Hillfort) {
+        super.update(item)
+        serialize()
     }
 
     override fun delete(item: User) {
@@ -38,12 +57,13 @@ class UserJSONStore(val context: Context) : UserMemStore() {
     }
 
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(users, listType)
+        val jsonString = gsonBuilder.toJson(data, Data::class.java)
         write(context, JSON_FILE, jsonString)
     }
 
     private fun deserialize() {
         val jsonString = read(context, JSON_FILE)
-        users = Gson().fromJson(jsonString, listType)
+        println(jsonString)
+        data = Gson().fromJson(jsonString, Data::class.java)
     }
 }

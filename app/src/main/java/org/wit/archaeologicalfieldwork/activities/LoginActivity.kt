@@ -3,7 +3,7 @@ package org.wit.archaeologicalfieldwork.activities
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
 import android.content.CursorLoader
 import android.content.Loader

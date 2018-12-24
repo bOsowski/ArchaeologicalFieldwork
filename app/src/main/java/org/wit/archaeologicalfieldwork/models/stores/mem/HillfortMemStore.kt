@@ -1,8 +1,9 @@
-package org.wit.archaeologicalfieldwork.models.stores
+package org.wit.archaeologicalfieldwork.models.stores.mem
 
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.wit.archaeologicalfieldwork.models.stores.Store
 
 open class HillfortMemStore : Store<Hillfort>, AnkoLogger{
 

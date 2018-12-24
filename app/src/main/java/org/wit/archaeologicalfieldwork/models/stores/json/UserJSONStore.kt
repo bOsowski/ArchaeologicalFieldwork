@@ -1,21 +1,21 @@
-package org.wit.archaeologicalfieldwork.models.stores
+package org.wit.archaeologicalfieldwork.models.stores.json
 
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import org.jetbrains.anko.info
 import org.wit.archaeologicalfieldwork.helpers.exists
 import org.wit.archaeologicalfieldwork.helpers.read
 import org.wit.archaeologicalfieldwork.helpers.write
-import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.wit.archaeologicalfieldwork.models.User
+import org.wit.archaeologicalfieldwork.models.stores.mem.UserMemStore
 import java.util.ArrayList
 
-class HillfortJSONStore(val context: Context) : HillfortMemStore() {
+class UserJSONStore(val context: Context) : UserMemStore() {
 
-    val JSON_FILE = "hillforts.json"
+    val JSON_FILE = "users.json"
     val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-    val listType = object : TypeToken<ArrayList<Hillfort>>() {}.type
+    val listType = object : TypeToken<ArrayList<User>>() {}.type
 
     init {
         if (exists(context, JSON_FILE)) {
@@ -23,29 +23,28 @@ class HillfortJSONStore(val context: Context) : HillfortMemStore() {
         }
     }
 
-    override fun delete(item: Hillfort) {
+    override fun delete(item: User) {
         super.delete(item)
         serialize()
     }
 
-    override fun create(item: Hillfort) {
+    override fun create(item: User) {
         super.create(item)
         serialize()
     }
 
-
-    override fun update(item: Hillfort) {
+    override fun update(item: User) {
         super.update(item)
         serialize()
     }
 
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(hillforts, listType)
+        val jsonString = gsonBuilder.toJson(users, listType)
         write(context, JSON_FILE, jsonString)
     }
 
     private fun deserialize() {
         val jsonString = read(context, JSON_FILE)
-        hillforts = Gson().fromJson(jsonString, listType)
+        users = Gson().fromJson(jsonString, listType)
     }
 }

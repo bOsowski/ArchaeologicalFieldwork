@@ -1,6 +1,6 @@
 package org.wit.archaeologicalfieldwork.views.hillfort
 
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.os.Bundle
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_hillfort.*

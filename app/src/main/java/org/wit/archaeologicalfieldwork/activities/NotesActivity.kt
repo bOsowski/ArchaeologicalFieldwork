@@ -1,8 +1,8 @@
 package org.wit.archaeologicalfieldwork.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_notes.*
@@ -14,7 +14,7 @@ import org.wit.archaeologicalfieldwork.adapters.NoteListener
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Note
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.views.hillfort.HillfortView

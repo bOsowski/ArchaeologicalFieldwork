@@ -2,8 +2,8 @@ package org.wit.archaeologicalfieldwork.views
 
 import android.content.Intent
 import android.os.Parcelable
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import org.jetbrains.anko.AnkoLogger
 import org.wit.archaeologicalfieldwork.adapters.ImageListener
 import org.wit.archaeologicalfieldwork.models.Hillfort
