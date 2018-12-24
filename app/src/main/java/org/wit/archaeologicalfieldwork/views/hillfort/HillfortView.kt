@@ -1,6 +1,5 @@
 package org.wit.archaeologicalfieldwork.views.hillfort
 
-import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.os.Bundle
 import com.google.android.gms.maps.GoogleMap
@@ -25,7 +24,11 @@ class HillfortView : BaseView(), AnkoLogger {
         mapView2.onCreate(savedInstanceState)
         mapView2.getMapAsync {
             map = it
+            map.setOnMapClickListener { _ ->
+                presenter.doSetLocation()
+            }
             presenter.doConfigureMap(map)
+            mapView2.onResume() //this line fixes a bug where the map would not properly load.
         }
 //        The title would obstruct buttons for this view.
 //        toolbarAdd.title = title
@@ -47,10 +50,6 @@ class HillfortView : BaseView(), AnkoLogger {
 
         chooseImage.setOnClickListener {
             presenter.doSelectImage()
-        }
-
-        hillfortLocation.setOnClickListener {
-            presenter.doSetLocation()
         }
 
         delete.setOnClickListener {

@@ -76,7 +76,7 @@
     <android.support.design.widget.TextInputEditText
             android:id="@+id/hillfortDescription"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="33dp"
             android:hint="@string/hint_hillfortDescription"
             android:inputType="text"
             android:maxLength="25"
@@ -87,37 +87,26 @@
             app:layout_constraintTop_toBottomOf="@+id/hillfortName" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"/>
-    <Button
-            android:id="@+id/hillfortLocation"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:layout_width="150dp"
-            android:text="@string/button_location"
-            android:textColor="@color/colorWhite"
-            android:textSize="16sp"
-            android:textAllCaps="true"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/hillfortDescription" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"/>
     <CheckBox
             android:text="@string/visited"
             android:layout_width="0dp"
-            android:layout_height="0dp" android:id="@+id/visitedCheckBox"
+            android:layout_height="50dp" android:id="@+id/visitedCheckBox"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="@+id/hillfortLocation"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/hillfortLocation"
-            app:layout_constraintBottom_toBottomOf="@+id/viewNotes"/>
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@+id/viewNotes" android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/mapView2"/>
     <Button
             android:id="@+id/chooseImage"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:text="@string/button_addImage"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/hillfortDescription" android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/viewNotes"/>
     <Button
             android:id="@+id/viewNotes"
             android:layout_width="150dp"
@@ -128,25 +117,29 @@
             android:text="@string/button_view_notes"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@+id/hillfortLocation" android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/chooseImage"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/mapView2"/>
 
     <android.support.v7.widget.RecyclerView
-            android:layout_width="381dp"
-            android:layout_height="151dp"
-            android:id="@+id/recyclerViewImages"
-            android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/visitedCheckBox" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"/>
-    <com.google.android.gms.maps.MapView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:id="@+id/mapView2" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewImages" android:layout_marginEnd="8dp"
+            android:id="@+id/recyclerViewImages"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:scrollbars="none" android:maxHeight="150dp" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/chooseImage"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/recycler_view_item" tools:itemCount="3"/>
+    <com.google.android.gms.maps.MapView
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:id="@+id/mapView2"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/hillfortDescription"/>
 </android.support.constraint.ConstraintLayout>
