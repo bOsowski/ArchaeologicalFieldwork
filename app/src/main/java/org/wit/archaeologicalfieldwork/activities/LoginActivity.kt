@@ -18,6 +18,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
 
 import java.util.ArrayList
 
@@ -29,7 +30,6 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.R
-import org.wit.archaeologicalfieldwork.models.User
 import org.wit.archaeologicalfieldwork.views.hillfortList.HillfortListView
 
 /**
@@ -38,6 +38,8 @@ import org.wit.archaeologicalfieldwork.views.hillfortList.HillfortListView
 class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
     lateinit var app : MainApp
+    var auth: FirebaseAuth = FirebaseAuth.getInstance()
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -51,11 +53,26 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
         //todo: remove the below
         startActivity(intentFor<HillfortListView>())
-        val user = User()
-        user.email = "test@test.test"
-        user.password = "testPassword"
+        val testEmail = "test@test.test"
+        val testPassword = "testPassword"
+
+
+        auth.createUserWithEmailAndPassword(testEmail, testPassword).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                info("Successfully created account.")
+            } else {
+            }
+        }
+
+        auth.signInWithEmailAndPassword(testEmail, testPassword).addOnCompleteListener(this) { task ->
+            if(task.isSuccessful){
+                info("Successfully logged in")
+            }
+                else{
+                info("Failed to log in")
+            }
+        }
         //app.data.create(user)
-        app.currentUser = user//app.data.findAllUsers().first()
         finish()
         //todo: remove the above
 
@@ -235,32 +252,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            var user: User?
-                user = User()//app.users.findAll().find { it.email == mEmail }
-            return when {
-                user != null && user.password == mPassword -> {
-                    app.currentUser = user
-                    info("User tried to log in with $mEmail, $mPassword. User found and password matching.")
-                    startActivity(intentFor<HillfortListView>())
-                    true
-                }
-                user != null -> {
-                    info("User tried to log in with $mEmail, $mPassword. User email found but mismatching password.")
-                    false
-                }
-                else -> {
-                    info("User tried to log in with $mEmail, $mPassword. User email not found. Creating new user")
-                    user = User()
-                    user.email = mEmail
-                    user.password = mPassword
-                    async(UI) {
-                        app.users.create(user)
-                    }
-                    app.currentUser = user
-                    startActivity(intentFor<HillfortListView>())
-                    true
-                }
-            }
+            return true
         }
 
         override fun onPostExecute(success: Boolean?) {

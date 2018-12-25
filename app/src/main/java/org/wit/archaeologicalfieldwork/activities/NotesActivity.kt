@@ -29,7 +29,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     lateinit var hillfort: Hillfort
 
     override fun onNoteClick(note: Note) {
-        if(app.currentUser.id != note.userId){
+        if(app.user?.email != note.addedBy){
             return
         }
 
@@ -77,7 +77,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         when (item?.itemId) {
             R.id.note_add -> {
                 var note = Note()
-                note.userId = app.currentUser.id
+                note.addedBy = app.user?.email!!
                 async(UI) {
                     app.notes.create(note)
                     showNotes(app.notes.findAll().filter { it.hillfortId == hillfort.id })
@@ -100,7 +100,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     private fun showNotes(notes: List<Note>){
         val listener = this
         async(UI) {
-            recyclerViewNotes.adapter = NoteAdapter(notes, app.users.findAll(), app.currentUser, listener)
+            recyclerViewNotes.adapter = NoteAdapter(notes, listener)
             recyclerViewNotes.adapter?.notifyDataSetChanged()
         }
     }

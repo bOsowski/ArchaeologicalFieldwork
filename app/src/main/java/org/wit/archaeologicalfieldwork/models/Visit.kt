@@ -9,11 +9,10 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-@Entity(foreignKeys = [ForeignKey(entity = Hillfort::class, parentColumns = ["id"], childColumns = ["hillfortId"]),
-                       ForeignKey(entity = User::class, parentColumns = ["id"], childColumns = ["userId"])])
+@Entity(foreignKeys = [ForeignKey(entity = Hillfort::class, parentColumns = ["id"], childColumns = ["hillfortId"])])
 data class Visit(
     @Embedded var date: Date = Date(),
     var hillfortId: Long = 0,
-    var userId: Long = 0,
+    var addedBy: String = "",
     @PrimaryKey(autoGenerate = true) var id: Long = 0
     ) : Parcelable

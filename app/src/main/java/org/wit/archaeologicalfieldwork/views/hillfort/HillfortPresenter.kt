@@ -56,12 +56,12 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     fun doAddOrSave(){
         hillfort.name = view?.hillfortName!!.text.toString()
         hillfort.description = view?.hillfortDescription!!.text.toString()
-        hillfort.addedBy = app.currentUser.id
+        hillfort.addedBy = app.user?.email!!
 
         if(view?.visitedCheckBox!!.isChecked){
             val visit = Visit()
             visit.hillfortId = hillfort.id
-            visit.userId = app.currentUser.id
+            visit.addedBy = app.user?.email!!
             if(date != null){
                 visit.date = date!!
             }
@@ -75,7 +75,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
         }
         else{
             async(UI) {
-                    app.visits.delete(app.visits.findAll().filter { it.hillfortId == hillfort.id }.find { it.userId == app.currentUser.id }!!)
+                    app.visits.delete(app.visits.findAll().filter { it.hillfortId == hillfort.id }.find { it.addedBy == app.user?.email!!}!!)
             }
         }
         if (hillfort.name.isNotEmpty()) {

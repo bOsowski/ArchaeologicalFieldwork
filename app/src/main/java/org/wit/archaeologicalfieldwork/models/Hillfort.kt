@@ -8,11 +8,11 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity//(foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["id"], childColumns = ["addedBy"])])
+@Entity
 data class Hillfort(
     var name: String = "",
     var description: String = "",
-//    @Embedded  var location: Location = Location(),
-    var addedBy: Long = 0,
+    @Embedded  var location: Location = Location(),
+    var addedBy: String = "",
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

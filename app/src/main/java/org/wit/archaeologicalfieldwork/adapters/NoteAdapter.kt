@@ -4,13 +4,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.card_note.view.*
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.models.Note
-import org.wit.archaeologicalfieldwork.models.User
 
-class NoteAdapter constructor(private var notes: List<Note>, private var users: List<User>, private var currentUser: User,
-                              private val listener: NoteListener) : RecyclerView.Adapter<NoteAdapter.MainHolder>() {
+class NoteAdapter constructor(private var notes: List<Note>, private val listener: NoteListener) : RecyclerView.Adapter<NoteAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_note, parent, false))
@@ -18,18 +17,18 @@ class NoteAdapter constructor(private var notes: List<Note>, private var users: 
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val note = notes[holder.adapterPosition]
-        holder.bind(note, users, currentUser, listener)
+        holder.bind(note, listener)
     }
 
     override fun getItemCount(): Int = notes.size
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(note: Note, users: List<User>, currentUser: User,  listener : NoteListener) {
+        fun bind(note: Note, listener : NoteListener) {
             itemView.noteAddedOn.text = "Added on ${note.creationDate}"
             itemView.noteEditedOn.text = "Last edited on ${note.lastEdited}"
-            itemView.noteAddedBy.text = "Added by ${users.find { it.id == note.userId }?.email}"
-            if(note.userId == currentUser.id) {
+            itemView.noteAddedBy.text = "Added by ${note.addedBy}"
+            if(note.addedBy == FirebaseAuth.getInstance().currentUser?.email) {
                 itemView.setBackgroundResource(R.color.colorGray)
             }
             itemView.noteText.text = note.text

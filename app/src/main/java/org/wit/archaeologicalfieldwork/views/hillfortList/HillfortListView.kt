@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_hillfort_list.*
+import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.AnkoLogger
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -34,12 +35,13 @@ class HillfortListView : BaseView(), HillfortListener {
         init(toolbarMain)
 
         presenter = initPresenter(HillfortListPresenter(this)) as HillfortListPresenter
-        async(UI){
-            presenter.app.hillforts.create(Hillfort(name = "Test :3"))
-
-        }
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
+        async(UI){
+            info("Current user id = ${presenter.app.user?.email}")
+            presenter.app.hillforts.create(Hillfort(name = "Test :3", addedBy = presenter.app.user?.email!!))
+
+        }
         presenter.loadHillforts()
         settings.setOnClickListener {
             startActivity(intentFor<SettingsActivity>())
