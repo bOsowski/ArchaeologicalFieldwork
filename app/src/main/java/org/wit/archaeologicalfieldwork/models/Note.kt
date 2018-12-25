@@ -15,7 +15,7 @@ data class Note(
     var userId: Long = 0,
     var hillfortId: Long = 0,
     var text: String = "",
-//    @Embedded var creationDate: Date = Date(),
-//    @Embedded var lastEdited: Date = Date()
+    @Embedded var creationDate: Date = Date(),
+    @Embedded var lastEdited: Date = Date(),
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

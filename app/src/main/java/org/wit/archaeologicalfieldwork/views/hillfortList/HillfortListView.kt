@@ -6,6 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_hillfort_list.*
+import org.jetbrains.anko.AnkoLogger
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.activities.SettingsActivity
@@ -29,14 +34,21 @@ class HillfortListView : BaseView(), HillfortListener {
         init(toolbarMain)
 
         presenter = initPresenter(HillfortListPresenter(this)) as HillfortListPresenter
+        async(UI){
+            presenter.app.hillforts.create(Hillfort(name = "Test :3"))
 
+        }
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = HillfortAdapter(presenter.getHillforts(), this)
-
+        presenter.loadHillforts()
         settings.setOnClickListener {
             startActivity(intentFor<SettingsActivity>())
         }
+    }
+
+    override fun showHillforts(hillforts: List<Hillfort>){
+        recyclerView.adapter = HillfortAdapter(hillforts, this)
+        recyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -53,6 +65,7 @@ class HillfortListView : BaseView(), HillfortListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        presenter.loadHillforts()
         recyclerView.adapter?.notifyDataSetChanged()
         super.onActivityResult(requestCode, resultCode, data)
     }

@@ -13,6 +13,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_hillfort.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.*
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.adapters.ImageAdapter
@@ -58,6 +60,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
 
         if(view?.visitedCheckBox!!.isChecked){
             val visit = Visit()
+            visit.hillfortId = hillfort.id
             visit.userId = app.currentUser.id
             if(date != null){
                 visit.date = date!!
@@ -65,15 +68,24 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             else{
                 visit.date = Date()
             }
-            hillfort.visits.add(visit)
+            async(UI) {
+                app.visits.create(visit)
+            }
+
         }
         else{
-            hillfort.visits.remove(hillfort.visits.find { it.userId == app.currentUser.id })
+            async(UI) {
+                    app.visits.delete(app.visits.findAll().filter { it.hillfortId == hillfort.id }.find { it.userId == app.currentUser.id }!!)
+            }
         }
         if (hillfort.name.isNotEmpty()) {
-            if (editing){app.data.update(hillfort)}
-            else { app.data.create(hillfort)}
-            view?.finish()
+            async(UI) {
+                if (editing){app.hillforts.update(hillfort)}
+                else {
+                    app.hillforts.create(hillfort)
+                }
+                view?.finish()
+                }
         } else{ view?.toast(R.string.no_title_toast) }
     }
 
@@ -82,8 +94,10 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     }
 
     fun doDelete(){
-        app.data.delete(hillfort)
-        view?.finish()
+        async(UI) {
+            app.hillforts.delete(hillfort)
+            view?.finish()
+        }
     }
 
     fun doSelectImage(){
@@ -93,29 +107,32 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     }
 
     fun doSetLocation() {
-        view?.navigateTo(VIEW.LOCATION, LOCATION_REQUEST, "location", hillfort.location)
+       // view?.navigateTo(VIEW.LOCATION, LOCATION_REQUEST, "location", hillfort.location)
     }
 
     override fun doActivityResult(requestCode: Int, data: Intent?){
-        (view as HillfortView).showImages(hillfort.images)
-        when(requestCode){
-            ADD_IMAGE_REQUEST -> {
-                if(data != null){
-                    hillfort.images.add(data.data.toString())
+        async(UI) {
+            (view as HillfortView).showImages(app.images.findAll().filter { it.hillfortId == hillfort.id })
+            when(requestCode){
+                ADD_IMAGE_REQUEST -> {
+                    //todo: fix the below.
+                    if(data != null){
+                        //hillfort.images.add(data.data.toString())
+                    }
                 }
-            }
-            IMAGE_EDIT_REQUEST -> {
-                if(data != null){
-                    hillfort.images[hillfort.images.indexOf(editedImage)] = data.data.toString()
+                IMAGE_EDIT_REQUEST -> {
+                    if(data != null){
+                        // hillfort.images[hillfort.images.indexOf(editedImage)] = data.data.toString()
+                    }
+                    else{
+                        //hillfort.images.remove(editedImage)
+                    }
                 }
-                else{
-                    hillfort.images.remove(editedImage)
-                }
-            }
-            LOCATION_REQUEST -> {
-                if (data != null) {
-                    hillfort.location = data.extras.getParcelable("location")
-                    locationUpdate(hillfort.location.lat, hillfort.location.lng)
+                LOCATION_REQUEST -> {
+                    if (data != null) {
+                      //  hillfort.location = data.extras.getParcelable("location")
+                      //  locationUpdate(hillfort.location.lat, hillfort.location.lng)
+                    }
                 }
             }
         }
@@ -155,22 +172,22 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     }
 
     fun locationUpdate(lat: Double, lng: Double){
-        hillfort.location.lat = lat
-        hillfort.location.lng = lng
-        hillfort.location.zoom = 15f
+       // hillfort.location.lat = lat
+        //hillfort.location.lng = lng
+       // hillfort.location.zoom = 15f
         view?.hillfortLat?.text = view?.resources!!.getString(R.string.hillfortLat, lat)
         view?.hillfortLng?.text = view?.resources!!.getString(R.string.hillfortLng, lng)
         map?.clear()
         map?.uiSettings?.isZoomControlsEnabled = true
         val options = MarkerOptions().title(hillfort.name).position(LatLng(lat, lng))
         map?.addMarker(options)
-        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), hillfort.location.zoom))
+      //  map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), hillfort.location.zoom))
         view?.showHillfort(hillfort)
     }
 
     fun doConfigureMap(map: GoogleMap) {
         this.map = map
-        locationUpdate(hillfort.location.lat, hillfort.location.lng)
+       // locationUpdate(hillfort.location.lat, hillfort.location.lng)
     }
 
     override fun doRequestPermissionsResult(requestCode: Int, permission: Array<String>, grantResults: IntArray) {

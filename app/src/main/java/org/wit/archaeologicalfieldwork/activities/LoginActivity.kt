@@ -22,6 +22,8 @@ import android.widget.TextView
 import java.util.ArrayList
 
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
@@ -49,11 +51,11 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
         //todo: remove the below
         startActivity(intentFor<HillfortListView>())
-        var user = User()
+        val user = User()
         user.email = "test@test.test"
         user.password = "testPassword"
-        app.data.create(user)
-        app.currentUser = app.data.findAll().users.first()
+        //app.data.create(user)
+        app.currentUser = user//app.data.findAllUsers().first()
         finish()
         //todo: remove the above
 
@@ -233,7 +235,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            var user: User? = app.data.findAll().users.find { it.email == mEmail }
+            var user: User?
+                user = User()//app.users.findAll().find { it.email == mEmail }
             return when {
                 user != null && user.password == mPassword -> {
                     app.currentUser = user
@@ -250,7 +253,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                     user = User()
                     user.email = mEmail
                     user.password = mPassword
-                    app.data.create(user)
+                    async(UI) {
+                        app.users.create(user)
+                    }
                     app.currentUser = user
                     startActivity(intentFor<HillfortListView>())
                     true

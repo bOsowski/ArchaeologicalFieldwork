@@ -1,8 +1,9 @@
 package org.wit.archaeologicalfieldwork.models.stores
 
 interface Store<T>{
-    fun findAll(): List<T>
-    fun create(item: T)
-    fun update(item: T)
-    fun delete(item: T)
+    suspend fun findAll(): List<T>
+    suspend fun find(id: Long): T
+    suspend fun create(item: T)
+    suspend fun update(item: T)
+    suspend fun delete(item: T)
 }

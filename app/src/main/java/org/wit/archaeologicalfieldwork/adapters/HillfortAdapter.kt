@@ -30,7 +30,7 @@ class HillfortAdapter constructor(private var hillforts: List<Hillfort>,
             itemView.name.text = hillfort.name
             itemView.description.text = hillfort.description
             try{
-                itemView.image.setImageBitmap(readImageFromPath(itemView.context, hillfort.images.first()))
+                itemView.image.setImageBitmap(readImageFromPath(itemView.context, ""))//todo: fix this
             }catch (e: Exception){
 
             }

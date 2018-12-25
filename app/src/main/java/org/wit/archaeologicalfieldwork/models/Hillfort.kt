@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["id"], childColumns = ["addedBy"])])
+@Entity//(foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["id"], childColumns = ["addedBy"])])
 data class Hillfort(
     var name: String = "",
     var description: String = "",

@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(foreignKeys = [ForeignKey(entity = Hillfort::class, parentColumns = ["id"], childColumns = ["hillfortId"]),
     ForeignKey(entity = User::class, parentColumns = ["id"], childColumns = ["addedBy"])])
 data class Image (
-//    @Embedded var data: Bitmap? = null, todo: fix this
+    var data: String = "",
     var hillfortId: Long = 0,
     var addedBy: Long = 0,
     @PrimaryKey(autoGenerate = true) var id: Long = 0

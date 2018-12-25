@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity;
 
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.main.MainApp
@@ -26,15 +28,13 @@ class SettingsActivity : AppCompatActivity() {
         var visitedHillforts = 0
         var totalHillforts = 0
 
-        app.data.findAll().hillforts.forEach {
-            totalHillforts++
-            if (it.addedBy == user.id){
-                addedHillforts++
-            }
-            it.visits.forEach {
-                if(it.userId == user.id){
-                    visitedHillforts++
+        async(UI) {
+            app.hillforts.findAll().forEach {
+                totalHillforts++
+                if (it.addedBy == user.id){
+                    addedHillforts++
                 }
+                visitedHillforts += app.visits.findAll().filter { it.userId == user.id }.size
             }
         }
 
@@ -54,7 +54,9 @@ class SettingsActivity : AppCompatActivity() {
         save_user_settings.setOnClickListener {
             user.email = email.text.toString()
             user.password = password.text.toString()
-            app.data.update(user)
+            async(UI) {
+                app.users.update(user)
+            }
         }
     }
 

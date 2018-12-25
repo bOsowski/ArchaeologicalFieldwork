@@ -2,10 +2,19 @@ package org.wit.archaeologicalfieldwork.models.stores.room
 
 import android.content.Context
 import androidx.room.Room
-import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.info
+import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.Store
 
-class HillfortStoreRoom(val context: Context): Store<Hillfort>{
+class HillfortStoreRoom(val context: Context): Store<Hillfort>, AnkoLogger{
+    override suspend fun find(id: Long): Hillfort {
+        val defferedHillfort =  bg{  dao.find(id) }
+        val hillfort = defferedHillfort.await()
+        return hillfort
+    }
+
     var dao: HillfortDao
 
     init {
@@ -15,20 +24,22 @@ class HillfortStoreRoom(val context: Context): Store<Hillfort>{
         dao = database.hillfortDao()
     }
 
-    override fun findAll(): List<Hillfort> {
-        return dao.findAllHillforts()
+    override suspend fun findAll(): MutableList<Hillfort> {
+        val defferedHillforts = bg{dao.findAll()}
+        val hillforts = defferedHillforts.await()
+        return hillforts
     }
 
-    override fun create(item: Hillfort) {
-        dao.create(item)
+    override suspend fun create(item: Hillfort) {
+        bg{dao.create(item)}
     }
 
-    override fun update(item: Hillfort) {
-        dao.update(item)
+    override suspend fun update(item: Hillfort) {
+       bg{dao.update(item)}
     }
 
-    override fun delete(item: Hillfort) {
-       dao.delete(item)
+    override suspend fun delete(item: Hillfort) {
+       bg{dao.delete(item)}
     }
 
     fun clear(){

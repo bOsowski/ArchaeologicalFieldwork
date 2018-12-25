@@ -2,8 +2,10 @@ package org.wit.archaeologicalfieldwork.views.hillfort
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.os.Bundle
+import kotlinx.coroutines.experimental.android.UI
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_hillfort.*
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.*
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.activities.NotesActivity
@@ -11,6 +13,7 @@ import org.wit.archaeologicalfieldwork.adapters.ImageAdapter
 import org.wit.archaeologicalfieldwork.helpers.simplifyDate
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.wit.archaeologicalfieldwork.models.Image
 import org.wit.archaeologicalfieldwork.views.BaseView
 
 class HillfortView : BaseView(), AnkoLogger {
@@ -45,6 +48,9 @@ class HillfortView : BaseView(), AnkoLogger {
         }
 
         btnSave.setOnClickListener {
+            async(UI) {
+                info("#### Amount of hillforts = ${presenter.app.hillforts.findAll().size}")
+            }
             presenter.doAddOrSave()
         }
 
@@ -65,20 +71,23 @@ class HillfortView : BaseView(), AnkoLogger {
 
     override fun showHillfort(hillfort: Hillfort){
         val layoutManager = LinearLayoutManager(this)
-        recyclerViewImages.layoutManager = layoutManager
 
-        hillfortName.setText(hillfort.name)
-        hillfortDescription.setText(hillfort.description)
-        val visit = hillfort.visits.find { it.userId == (application as MainApp).currentUser.id }
-        if(visit != null){
-            visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(visit.date))
+        async(UI) {
+            recyclerViewImages.layoutManager = layoutManager
+
+            hillfortName.setText(hillfort.name)
+            hillfortDescription.setText(hillfort.description)
+            val visit = presenter.app.visits.findAll().filter{it.hillfortId == hillfort.id}.find { it.userId == (application as MainApp).currentUser.id }
+            if(visit != null){
+                visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(visit.date))
+            }
+            visitedCheckBox.isChecked = visit != null
+            showImages(presenter.app.images.findAll().filter { it.hillfortId == hillfort.id })
         }
-        visitedCheckBox.isChecked = visit != null
-        showImages(hillfort.images)
     }
 
-    fun showImages(images: List<String>){
-        recyclerViewImages.adapter = ImageAdapter(images, this)
+    fun showImages(images: List<Image>){
+        recyclerViewImages.adapter = ImageAdapter(ArrayList(), this)//todo: fix this
         recyclerViewImages.adapter?.notifyDataSetChanged()
     }
 

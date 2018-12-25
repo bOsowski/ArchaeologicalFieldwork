@@ -1,5 +1,7 @@
 package org.wit.archaeologicalfieldwork.views.hillfortList
 
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
@@ -12,7 +14,11 @@ import org.wit.archaeologicalfieldwork.views.hillfort.HillfortView
 
 class HillfortListPresenter(view: BaseView) : BasePresenter(view){
 
-    fun getHillforts() = app.data.findAll().hillforts
+    fun loadHillforts(){
+     async(UI){
+        view?.showHillforts(app.hillforts.findAll())
+     }
+    }
 
     fun doAddHillfort(){
         view?.startActivityForResult<HillfortView>(0)
