@@ -13,7 +13,7 @@ interface NoteDao {
     fun findAll(): MutableList<Note>
 
     @Query("SELECT * FROM Note WHERE id = :id")
-    fun find(id: Long): Note
+    fun find(id: Long): Note?
 
     @Update
     fun update(note: Note)

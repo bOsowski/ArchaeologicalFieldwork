@@ -11,6 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(foreignKeys = [ForeignKey(entity = Hillfort::class, parentColumns = ["id"], childColumns = ["hillfortId"])])
 data class Image (
+    var fbId : String = "",
     var data: String = "",
     var hillfortId: Long = 0,
     var addedBy: String = "",

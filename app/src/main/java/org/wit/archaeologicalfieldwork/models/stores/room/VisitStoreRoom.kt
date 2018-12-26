@@ -7,7 +7,7 @@ import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.Store
 
 class VisitStoreRoom(val context: Context): Store<Visit>{
-    override suspend fun find(id: Long): Visit {
+    override suspend fun find(id: Long): Visit? {
         val defferedVisit = bg{ dao.find(id) }
         val visit = defferedVisit.await()
         return visit

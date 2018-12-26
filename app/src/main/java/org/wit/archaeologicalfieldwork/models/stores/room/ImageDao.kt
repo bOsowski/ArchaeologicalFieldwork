@@ -17,7 +17,7 @@ interface ImageDao {
     fun findAll(): MutableList<Image>
 
     @Query("SELECT * FROM Image WHERE id = :id")
-    fun find(id: Long): Image
+    fun find(id: Long): Image?
 
 //    @Query("SELECT * FROM Image WHERE id = :id")
 //    fun findImageById(id: Long): Image

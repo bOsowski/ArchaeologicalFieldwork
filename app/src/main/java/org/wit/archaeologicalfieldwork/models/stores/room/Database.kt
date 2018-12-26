@@ -8,7 +8,6 @@ import org.wit.archaeologicalfieldwork.models.*
 abstract class Database: RoomDatabase(){
 
    abstract fun hillfortDao(): HillfortDao
-//   abstract fun userDao(): UserDao
    abstract fun visitDao(): VisitDao
    abstract fun noteDao(): NoteDao
    abstract fun imageDao(): ImageDao

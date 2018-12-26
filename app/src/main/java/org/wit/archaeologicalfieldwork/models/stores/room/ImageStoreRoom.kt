@@ -7,7 +7,7 @@ import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.Store
 
 class ImageStoreRoom(val context: Context): Store<Image>{
-    override suspend fun find(id: Long): Image {
+    override suspend fun find(id: Long): Image? {
         val defferedImage = bg{dao.find(id)}
         val image = defferedImage.await()
         return image

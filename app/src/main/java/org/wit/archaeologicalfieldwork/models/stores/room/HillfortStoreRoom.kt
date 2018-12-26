@@ -9,7 +9,7 @@ import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.Store
 
 class HillfortStoreRoom(val context: Context): Store<Hillfort>, AnkoLogger{
-    override suspend fun find(id: Long): Hillfort {
+    override suspend fun find(id: Long): Hillfort? {
         val defferedHillfort =  bg{  dao.find(id) }
         val hillfort = defferedHillfort.await()
         return hillfort

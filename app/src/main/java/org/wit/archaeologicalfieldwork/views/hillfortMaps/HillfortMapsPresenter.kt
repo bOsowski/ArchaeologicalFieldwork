@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.content_hillfort_maps.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.views.BasePresenter
 
 class HillfortMapsPresenter(view: HillfortMapsView) : BasePresenter(view){
@@ -28,7 +29,7 @@ class HillfortMapsPresenter(view: HillfortMapsView) : BasePresenter(view){
     fun doUpdateContent(marker: Marker) {
         view?.currentTitle!!.text = marker.title
         async(UI) {
-            val foundHillfort = app.hillforts.find(marker.tag as Long)
+            val foundHillfort = marker.tag as Hillfort
             val images = app.images.findAll().filter { it.hillfortId == foundHillfort.id }
             if(!images.isEmpty()){
                 Glide.with(view!!).load(images.first().data).into(view?.hillfortMapImage!!)

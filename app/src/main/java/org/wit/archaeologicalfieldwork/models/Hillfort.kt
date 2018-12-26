@@ -10,6 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity
 data class Hillfort(
+    var fbId : String = "",
     var name: String = "",
     var description: String = "",
     @Embedded  var location: Location = Location(),

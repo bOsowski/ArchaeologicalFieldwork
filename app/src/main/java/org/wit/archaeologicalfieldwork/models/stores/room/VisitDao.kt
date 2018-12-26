@@ -13,7 +13,7 @@ interface VisitDao {
     fun findAll(): MutableList<Visit>
 
     @Query("SELECT * FROM Visit WHERE id = :id")
-    fun find(id: Long): Visit
+    fun find(id: Long): Visit?
 
 //    @Query("SELECT * FROM Visit WHERE id = :id")
 //    fun findVisitById(id: Long): Visit

@@ -23,8 +23,6 @@ import com.google.firebase.auth.FirebaseAuth
 import java.util.ArrayList
 
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
@@ -39,6 +37,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
     lateinit var app : MainApp
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
+
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.

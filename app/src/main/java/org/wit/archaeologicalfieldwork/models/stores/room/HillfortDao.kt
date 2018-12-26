@@ -13,7 +13,7 @@ interface HillfortDao {
     fun findAll(): MutableList<Hillfort>
 
     @Query("SELECT * FROM Hillfort WHERE id = :id")
-    fun find(id: Long): Hillfort
+    fun find(id: Long): Hillfort?
 
     @Update
     fun update(hillfort: Hillfort)

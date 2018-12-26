@@ -7,7 +7,7 @@ import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.Store
 
 class NoteStoreRoom(val context: Context): Store<Note>{
-    override suspend fun find(id: Long): Note {
+    override suspend fun find(id: Long): Note? {
         val defferedNote = bg{dao.find(id)}
         val note = defferedNote.await()
         return note
