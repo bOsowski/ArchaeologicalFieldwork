@@ -44,8 +44,11 @@ class HillfortListView : BaseView(), HillfortListener {
     }
 
     override fun showHillforts(hillforts: List<Hillfort>){
-        recyclerView.adapter = HillfortAdapter(hillforts, this)
-        recyclerView.adapter?.notifyDataSetChanged()
+        val listener = this
+        async(UI){
+            recyclerView.adapter = HillfortAdapter(hillforts, presenter.app.images.findAll(), listener)
+            recyclerView.adapter?.notifyDataSetChanged()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

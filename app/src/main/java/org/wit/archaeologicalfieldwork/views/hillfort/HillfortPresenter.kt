@@ -18,6 +18,7 @@ import org.jetbrains.anko.*
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.helpers.*
 import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.wit.archaeologicalfieldwork.models.Image
 import org.wit.archaeologicalfieldwork.models.Location
 import org.wit.archaeologicalfieldwork.models.Visit
 import org.wit.archaeologicalfieldwork.views.*
@@ -29,7 +30,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     val locationRequest = createDefaultLocationRequest()
     var defaultLocation = Location(52.245696, -7.139102, 15f)
     var locationService: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view)
-    private lateinit var editedImage: String
+    private lateinit var editedImage: Image
     private var editing: Boolean = false
     var date: Date? = null
     var hillfort = Hillfort()
@@ -41,6 +42,9 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             hillfort = view.intent.extras.getParcelable("hillfort_edit")
             view.showHillfort(hillfort)
         } else{
+            async(UI){
+                hillfort.id = app.hillforts.create(hillfort)
+            }
             if (checkLocationPermissions(view)) {
                 doSetCurrentLocation()
             } else{
@@ -78,7 +82,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             async(UI) {
                 if (editing){app.hillforts.update(hillfort)}
                 else {
-                    hillfort.id = app.hillforts.create(hillfort)
+                    app.hillforts.update(hillfort)
                 }
                 view?.finish()
                 }
@@ -86,11 +90,21 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     }
 
     fun doCancel(){
+        doDelete()
         view?.finish()
     }
 
     fun doDelete(){
         async(UI) {
+                app.images.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                    app.images.delete(it)
+                }
+                app.visits.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                    app.visits.delete(it)
+                }
+                app.notes.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                    app.notes.delete(it)
+                }
             app.hillforts.delete(hillfort)
             view?.finish()
         }
@@ -108,33 +122,40 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
 
     override fun doActivityResult(requestCode: Int, data: Intent?){
         async(UI) {
-            (view as HillfortView).showImages(app.images.findAll().filter { it.hillfortId == hillfort.id })
+            (view as HillfortView).showImages()
         }
-            when(requestCode){
-                ADD_IMAGE_REQUEST -> {
-                    //todo: fix the below.
-                    if(data != null){
-                        //hillfort.images.add(data.data.toString())
-                    }
-                }
-                IMAGE_EDIT_REQUEST -> {
-                    if(data != null){
-                        // hillfort.images[hillfort.images.indexOf(editedImage)] = data.data.toString()
-                    }
-                    else{
-                        //hillfort.images.remove(editedImage)
-                    }
-                }
-                LOCATION_REQUEST -> {
-                    if (data != null) {
-                        locationUpdate(hillfort.location)
-                        hillfort.location = data.extras.getParcelable("location")
+        when(requestCode){
+            ADD_IMAGE_REQUEST -> {
+                if(data != null){
+                    async(UI) {
+                        val image = Image(hillfortId = hillfort.id, data = data.data.toString(), addedBy = app.user.email!!)
+                        image.id = app.images.create(image)
                     }
                 }
             }
+            IMAGE_EDIT_REQUEST -> {
+                if(data != null){
+                    editedImage.data = data.data.toString()
+                    async(UI) {
+                        app.images.update(editedImage)
+                    }
+                }
+                else{
+                    async(UI) {
+                        app.images.delete(editedImage)
+                    }
+                }
+            }
+            LOCATION_REQUEST -> {
+                if (data != null) {
+                    locationUpdate(hillfort.location)
+                    hillfort.location = data.extras.getParcelable("location")
+                }
+            }
+        }
     }
 
-    override fun doEditImage(image: String) {
+    override fun doEditImage(image: Image) {
         editedImage = image
         showImagePicker(view!!, IMAGE_EDIT_REQUEST)
     }

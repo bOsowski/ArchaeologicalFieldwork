@@ -78,13 +78,16 @@ class HillfortView : BaseView(), AnkoLogger {
                 visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(Date(visit.date)))
             }
             visitedCheckBox.isChecked = visit != null
-            showImages(presenter.app.images.findAll().filter { it.hillfortId == hillfort.id })
+            showImages()
         }
     }
 
-    fun showImages(images: List<Image>){
-        recyclerViewImages.adapter = ImageAdapter(ArrayList(), this)//todo: fix this
-        recyclerViewImages.adapter?.notifyDataSetChanged()
+    fun showImages(){
+        val listener = this
+        async(UI) {
+            recyclerViewImages.adapter = ImageAdapter(presenter.app.images.findAll().filter { it.hillfortId == presenter.hillfort.id }, listener)
+            recyclerViewImages.adapter?.notifyDataSetChanged()
+        }
     }
 
     override fun onResume() {

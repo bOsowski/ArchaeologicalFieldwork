@@ -2,6 +2,7 @@ package org.wit.archaeologicalfieldwork.views
 
 import android.content.Intent
 import org.wit.archaeologicalfieldwork.main.MainApp
+import org.wit.archaeologicalfieldwork.models.Image
 
 open class BasePresenter(var view: BaseView?) {
 
@@ -19,7 +20,7 @@ open class BasePresenter(var view: BaseView?) {
         view = null
     }
 
-    open fun doEditImage(image: String) {
+    open fun doEditImage(image: Image) {
 
     }
 }

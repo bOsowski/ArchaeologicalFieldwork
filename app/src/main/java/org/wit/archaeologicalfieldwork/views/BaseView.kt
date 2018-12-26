@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import org.jetbrains.anko.AnkoLogger
 import org.wit.archaeologicalfieldwork.adapters.ImageListener
 import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.wit.archaeologicalfieldwork.models.Image
 import org.wit.archaeologicalfieldwork.views.editLocation.EditLocationView
 import org.wit.archaeologicalfieldwork.views.hillfort.HillfortView
 import org.wit.archaeologicalfieldwork.views.hillfortList.HillfortListView
@@ -61,7 +62,7 @@ abstract class BaseView : AppCompatActivity(), AnkoLogger, ImageListener {
         basePresenter?.doRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    override fun onImageClick(image: String) {
+    override fun onImageClick(image: Image) {
         basePresenter?.doEditImage(image)
     }
 

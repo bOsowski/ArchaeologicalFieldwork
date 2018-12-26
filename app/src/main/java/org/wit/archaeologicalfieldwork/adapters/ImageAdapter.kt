@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.card_image.view.*
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.helpers.readImageFromPath
+import org.wit.archaeologicalfieldwork.models.Image
 
-class ImageAdapter constructor(private var images: List<String>,
+class ImageAdapter constructor(private var images: List<Image>,
                                   private val listener: ImageListener) : RecyclerView.Adapter<ImageAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -24,13 +25,13 @@ class ImageAdapter constructor(private var images: List<String>,
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(image: String,  listener : ImageListener) {
-            itemView.image.setImageBitmap(readImageFromPath(itemView.context, image))
+        fun bind(image: Image,  listener : ImageListener) {
+            itemView.image.setImageBitmap(readImageFromPath(itemView.context, image.data))
             itemView.setOnClickListener { listener.onImageClick(image) }
         }
     }
 }
 
 interface ImageListener {
-    fun onImageClick(image: String)
+    fun onImageClick(image: Image)
 }
