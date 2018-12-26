@@ -90,8 +90,12 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     }
 
     fun doCancel(){
-        doDelete()
-        view?.finish()
+        if(!editing){
+            doDelete()
+        }
+        else{
+            view?.finish()
+        }
     }
 
     fun doDelete(){

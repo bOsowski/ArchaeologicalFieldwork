@@ -4,9 +4,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.card_image.view.*
 import org.wit.archaeologicalfieldwork.R
-import org.wit.archaeologicalfieldwork.helpers.readImageFromPath
 import org.wit.archaeologicalfieldwork.models.Image
 
 class ImageAdapter constructor(private var images: List<Image>,
@@ -26,7 +26,7 @@ class ImageAdapter constructor(private var images: List<Image>,
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(image: Image,  listener : ImageListener) {
-            itemView.image.setImageBitmap(readImageFromPath(itemView.context, image.data))
+            Glide.with(itemView).load(image.data).into(itemView.image)
             itemView.setOnClickListener { listener.onImageClick(image) }
         }
     }
