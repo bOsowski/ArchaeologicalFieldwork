@@ -35,10 +35,9 @@ class HillfortAdapter constructor(private var hillforts: List<Hillfort>, private
         fun bind(hillfort: Hillfort, image: Image?, listener : HillfortListener) {
             itemView.name.text = hillfort.name
             itemView.description.text = hillfort.description
+            itemView.hillfortAddedBy.text = hillfort.addedBy
             if(image != null){
                 Glide.with(itemView).load(image.data).into(itemView.image)
-
-                //itemView.image.setImageBitmap(readImageFromPath(itemView.context, image.data))
             }
             itemView.setOnClickListener { listener.onHillfortClick(hillfort) }
         }

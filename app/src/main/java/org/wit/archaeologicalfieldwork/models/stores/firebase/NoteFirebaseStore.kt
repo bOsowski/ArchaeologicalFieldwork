@@ -50,6 +50,7 @@ class NoteFirebaseStore(val context: Context) : Store<Note>, AnkoLogger {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                notes.clear()
                 dataSnapshot.children.mapNotNullTo(notes) {it.getValue<Note>(Note::class.java)}
                 notesReady()
             }

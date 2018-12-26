@@ -49,6 +49,7 @@ class ImageFirebaseStore(val context: Context) : Store<Image>, AnkoLogger {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                images.clear()
                 dataSnapshot.children.mapNotNullTo(images) {it.getValue<Image>(Image::class.java)}
                 imagesReady()
             }

@@ -51,6 +51,7 @@ class HillfortFirebaseStore(val context: Context) : Store<Hillfort>, AnkoLogger 
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                hillforts.clear()
                 dataSnapshot.children.mapNotNullTo(hillforts) {it.getValue<Hillfort>(Hillfort::class.java)}
                 hillfortsReady()
             }

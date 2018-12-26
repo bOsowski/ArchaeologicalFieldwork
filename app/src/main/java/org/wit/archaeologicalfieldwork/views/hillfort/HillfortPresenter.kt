@@ -21,9 +21,12 @@ import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Image
 import org.wit.archaeologicalfieldwork.models.Location
 import org.wit.archaeologicalfieldwork.models.Visit
+import org.wit.archaeologicalfieldwork.models.stores.firebase.HillfortFirebaseStore
+import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
 import org.wit.archaeologicalfieldwork.views.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.timerTask
 
 class HillfortPresenter(view: BaseView) : BasePresenter(view){
 
@@ -37,6 +40,17 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
     var map: GoogleMap? = null
 
     init{
+
+        //show data changes if using firebase
+        if(app.images is ImageFirebaseStore) {
+            Timer().schedule(timerTask {
+                async(UI) {
+                    (app.images as ImageFirebaseStore).fetchImages { }
+                    (view as HillfortView).showImages()
+                }
+            }, 0, 1000)
+        }
+
         if (view.intent.hasExtra("hillfort_edit")) {
             editing = true
             hillfort = view.intent.extras.getParcelable("hillfort_edit")
@@ -71,7 +85,6 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             async(UI) {
                 app.visits.create(visit)
             }
-
         }
         else{
             async(UI) {

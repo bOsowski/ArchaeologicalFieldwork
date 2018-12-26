@@ -13,7 +13,6 @@ import org.wit.archaeologicalfieldwork.adapters.ImageAdapter
 import org.wit.archaeologicalfieldwork.helpers.simplifyDate
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
-import org.wit.archaeologicalfieldwork.models.Image
 import org.wit.archaeologicalfieldwork.views.BaseView
 import java.util.*
 
@@ -21,6 +20,7 @@ class HillfortView : BaseView(), AnkoLogger {
 
     private lateinit var presenter: HillfortPresenter
     lateinit var map: GoogleMap
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +64,7 @@ class HillfortView : BaseView(), AnkoLogger {
             startActivity(intentFor<NotesActivity>().putExtra("hillfort_data", presenter.hillfort))
             finish()
         }
+
     }
 
     override fun showHillfort(hillfort: Hillfort){

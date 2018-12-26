@@ -18,11 +18,15 @@ import org.wit.archaeologicalfieldwork.activities.SettingsActivity
 import org.wit.archaeologicalfieldwork.adapters.HillfortAdapter
 import org.wit.archaeologicalfieldwork.adapters.HillfortListener
 import org.wit.archaeologicalfieldwork.models.Hillfort
+import org.wit.archaeologicalfieldwork.models.stores.firebase.HillfortFirebaseStore
 import org.wit.archaeologicalfieldwork.views.BaseView
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class HillfortListView : BaseView(), HillfortListener {
 
-   lateinit var presenter: HillfortListPresenter
+    lateinit var presenter: HillfortListPresenter
+
 
     override fun onHillfortClick(hillfort: Hillfort) {
         presenter.doEditHillfort(hillfort)

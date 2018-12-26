@@ -21,8 +21,11 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.helpers.simplifyDate
+import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
+import org.wit.archaeologicalfieldwork.models.stores.firebase.NoteFirebaseStore
 import org.wit.archaeologicalfieldwork.views.hillfort.HillfortView
 import java.util.*
+import kotlin.concurrent.timerTask
 
 
 class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
@@ -45,9 +48,9 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
 
         alert.setPositiveButton("Save") { _, _ ->
             async(UI) {
-            note.text = input.text.toString()
-            note.lastEdited = Date().time
-            info("Set text to ${note.text}")
+                note.text = input.text.toString()
+                note.lastEdited = Date().time
+                info("Set text to ${note.text}")
                 app.notes.update(note)
                 showNotes()
             }
@@ -74,6 +77,16 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         info("Notes size should be obtained about now..")
         async {
             showNotes()
+        }
+
+        //show data changes if using firebase
+        if(app.notes is NoteFirebaseStore) {
+            Timer().schedule(timerTask {
+                async(UI) {
+                    (app.notes as NoteFirebaseStore).fetchNotes { }
+                    showNotes()
+                }
+            }, 0, 1000)
         }
     }
 
