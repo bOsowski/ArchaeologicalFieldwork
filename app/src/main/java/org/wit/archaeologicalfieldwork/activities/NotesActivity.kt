@@ -18,7 +18,9 @@ import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.intentFor
+import org.wit.archaeologicalfieldwork.helpers.simplifyDate
 import org.wit.archaeologicalfieldwork.views.hillfort.HillfortView
 import java.util.*
 
@@ -29,7 +31,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     lateinit var hillfort: Hillfort
 
     override fun onNoteClick(note: Note) {
-        if(app.user?.email != note.addedBy){
+        if(app.user.email != note.addedBy){
             return
         }
 
@@ -42,18 +44,19 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         alert.setView(input)
 
         alert.setPositiveButton("Save") { _, _ ->
-            note.text = input.text.toString()
-            note.lastEdited = Date()
-            info("Set text to ${note.text}")
             async(UI) {
-                showNotes(app.notes.findAll().filter { it.hillfortId == hillfort.id })
+            note.text = input.text.toString()
+            note.lastEdited = Date().time
+            info("Set text to ${note.text}")
+                app.notes.update(note)
+                showNotes()
             }
         }
 
         alert.setNegativeButton("Delete") { _, _ ->
             async(UI) {
                 app.notes.delete(note)
-                showNotes(app.notes.findAll().filter { it.hillfortId == hillfort.id })
+                showNotes()
             }
         }
         alert.show()
@@ -68,8 +71,9 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
 
         val layoutManager = LinearLayoutManager(this)
         recyclerViewNotes.layoutManager = layoutManager
-        async(UI) {
-            showNotes(app.notes.findAll().filter { it.hillfortId == hillfort.id })
+        info("Notes size should be obtained about now..")
+        async {
+            showNotes()
         }
     }
 
@@ -77,10 +81,11 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         when (item?.itemId) {
             R.id.note_add -> {
                 var note = Note()
-                note.addedBy = app.user?.email!!
+                note.hillfortId = hillfort.id
+                note.addedBy = app.user.email!!
                 async(UI) {
                     app.notes.create(note)
-                    showNotes(app.notes.findAll().filter { it.hillfortId == hillfort.id })
+                    showNotes()
                 }
             }
         }
@@ -97,10 +102,11 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun showNotes(notes: List<Note>){
+    private fun showNotes(){
         val listener = this
         async(UI) {
-            recyclerViewNotes.adapter = NoteAdapter(notes, listener)
+            recyclerViewNotes.adapter =
+                    NoteAdapter(app.notes.findAll().filter { it.hillfortId == hillfort.id }, listener)
             recyclerViewNotes.adapter?.notifyDataSetChanged()
         }
     }

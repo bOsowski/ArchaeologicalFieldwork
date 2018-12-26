@@ -48,9 +48,6 @@ class HillfortView : BaseView(), AnkoLogger {
         }
 
         btnSave.setOnClickListener {
-            async(UI) {
-                info("#### Amount of hillforts = ${presenter.app.hillforts.findAll().size}")
-            }
             presenter.doAddOrSave()
         }
 
@@ -77,7 +74,7 @@ class HillfortView : BaseView(), AnkoLogger {
 
             hillfortName.setText(hillfort.name)
             hillfortDescription.setText(hillfort.description)
-            val visit = presenter.app.visits.findAll().filter{it.hillfortId == hillfort.id}.find { it.addedBy == (application as MainApp).user?.email }
+            val visit = presenter.app.visits.findAll().filter{it.hillfortId == hillfort.id}.find { it.addedBy == (application as MainApp).user.email }
             if(visit != null){
                 visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(visit.date))
             }

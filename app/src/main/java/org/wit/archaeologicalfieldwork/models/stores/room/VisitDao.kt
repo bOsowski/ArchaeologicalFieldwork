@@ -7,7 +7,7 @@ import org.wit.archaeologicalfieldwork.models.Visit
 interface VisitDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun create(visit: Visit)
+    fun create(visit: Visit): Long
 
     @Query("SELECT * FROM Visit")
     fun findAll(): MutableList<Visit>

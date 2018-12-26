@@ -28,8 +28,10 @@ class NoteStoreRoom(val context: Context): Store<Note>{
         return notes
     }
 
-    override suspend fun create(item: Note) {
-        bg{dao.create(item)}
+    override suspend fun create(item: Note): Long {
+        val defferedIndex = bg{dao.create(item)}
+        val index = defferedIndex.await()
+        return index
     }
 
     override suspend fun update(item: Note) {

@@ -7,7 +7,7 @@ import org.wit.archaeologicalfieldwork.models.Hillfort
 interface HillfortDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun create(hillfort: Hillfort)
+    fun create(hillfort: Hillfort): Long
 
     @Query("SELECT * FROM Hillfort")
     fun findAll(): MutableList<Hillfort>

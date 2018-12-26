@@ -78,7 +78,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             async(UI) {
                 if (editing){app.hillforts.update(hillfort)}
                 else {
-                    app.hillforts.create(hillfort)
+                    hillfort.id = app.hillforts.create(hillfort)
                 }
                 view?.finish()
                 }

@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.card_note.view.*
 import org.wit.archaeologicalfieldwork.R
+import org.wit.archaeologicalfieldwork.helpers.simplifyDate
 import org.wit.archaeologicalfieldwork.models.Note
+import java.util.*
 
 class NoteAdapter constructor(private var notes: List<Note>, private val listener: NoteListener) : RecyclerView.Adapter<NoteAdapter.MainHolder>() {
 
@@ -25,8 +27,8 @@ class NoteAdapter constructor(private var notes: List<Note>, private val listene
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(note: Note, listener : NoteListener) {
-            itemView.noteAddedOn.text = "Added on ${note.creationDate}"
-            itemView.noteEditedOn.text = "Last edited on ${note.lastEdited}"
+            itemView.noteAddedOn.text = "Added on ${simplifyDate(Date(note.creationDate))}}"
+            itemView.noteEditedOn.text = "Last edited on ${simplifyDate(Date(note.lastEdited))}"
             itemView.noteAddedBy.text = "Added by ${note.addedBy}"
             if(note.addedBy == FirebaseAuth.getInstance().currentUser?.email) {
                 itemView.setBackgroundResource(R.color.colorGray)

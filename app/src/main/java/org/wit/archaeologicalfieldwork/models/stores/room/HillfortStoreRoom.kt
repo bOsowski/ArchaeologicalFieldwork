@@ -30,8 +30,10 @@ class HillfortStoreRoom(val context: Context): Store<Hillfort>, AnkoLogger{
         return hillforts
     }
 
-    override suspend fun create(item: Hillfort) {
-        bg{dao.create(item)}
+    override suspend fun create(item: Hillfort): Long {
+        val defferedIndex = bg{dao.create(item)}
+        val index = defferedIndex.await()
+        return index
     }
 
     override suspend fun update(item: Hillfort) {

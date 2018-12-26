@@ -28,8 +28,10 @@ class ImageStoreRoom(val context: Context): Store<Image>{
         return images
     }
 
-    override suspend fun create(item: Image) {
-        bg{dao.create(item)}
+    override suspend fun create(item: Image): Long {
+        val defferedIndex = bg{dao.create(item)}
+        val index = defferedIndex.await()
+        return index
     }
 
     override suspend fun update(item: Image) {

@@ -11,7 +11,7 @@ import org.wit.archaeologicalfieldwork.models.Visit
 interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun create(image: Image)
+    fun create(image: Image): Long
 
     @Query("SELECT * FROM Image")
     fun findAll(): MutableList<Image>

@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
+import org.wit.archaeologicalfieldwork.helpers.simplifyDate
 import java.util.*
 
 @Parcelize
@@ -14,7 +15,7 @@ data class Note(
     var addedBy: String = "",
     var hillfortId: Long = 0,
     var text: String = "",
-    @Embedded var creationDate: Date = Date(),
-    @Embedded var lastEdited: Date = Date(),
+    var creationDate: Long = Date().time,
+    var lastEdited: Long = Date().time,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : Parcelable

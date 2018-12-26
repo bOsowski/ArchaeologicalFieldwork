@@ -28,8 +28,10 @@ class VisitStoreRoom(val context: Context): Store<Visit>{
         return visits
     }
 
-    override suspend fun create(item: Visit) {
-       bg{ dao.create(item) }
+    override suspend fun create(item: Visit): Long {
+        val defferedIndex = bg{dao.create(item)}
+        val index = defferedIndex.await()
+        return index
     }
 
     override suspend fun update(item: Visit) {
