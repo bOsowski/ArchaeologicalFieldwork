@@ -28,6 +28,10 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.R
+import org.wit.archaeologicalfieldwork.models.stores.firebase.HillfortFirebaseStore
+import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
+import org.wit.archaeologicalfieldwork.models.stores.firebase.NoteFirebaseStore
+import org.wit.archaeologicalfieldwork.models.stores.firebase.VisitFirebaseStore
 import org.wit.archaeologicalfieldwork.views.hillfortList.HillfortListView
 
 /**
@@ -52,25 +56,51 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
         //todo: remove the below
         startActivity(intentFor<HillfortListView>())
-        val testEmail = "test@test.test"
-        val testPassword = "testPassword"
+        val testEmail = "test2@test.test"
+        val testPassword = "test2Password"
 
 
         auth.createUserWithEmailAndPassword(testEmail, testPassword).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                info("Successfully created account.")
+                info("##### Successfully created account.")
             } else {
+                info("##### Failed to create account.")
             }
         }
 
         auth.signInWithEmailAndPassword(testEmail, testPassword).addOnCompleteListener(this) { task ->
             if(task.isSuccessful){
-                info("Successfully logged in")
+                info("##### Successfully logged in")
+                app.user = FirebaseAuth.getInstance().currentUser!!
+
+
+                if(app.hillforts is HillfortFirebaseStore) {
+                    (app.hillforts as HillfortFirebaseStore).fetchHillforts {
+
+                    }
+                }
+                if(app.images is ImageFirebaseStore) {
+                    (app.images as ImageFirebaseStore).fetchImages {
+
+                    }
+                }
+                if(app.notes is NoteFirebaseStore) {
+                    (app.notes as NoteFirebaseStore).fetchNotes {
+
+                    }
+                }
+                if(app.visits is VisitFirebaseStore) {
+                    (app.visits as VisitFirebaseStore).fetchVisits {
+
+                    }
+                }
             }
                 else{
-                info("Failed to log in")
+                info("##### Failed to log in")
             }
         }
+
+
         //app.data.create(user)
         finish()
         //todo: remove the above

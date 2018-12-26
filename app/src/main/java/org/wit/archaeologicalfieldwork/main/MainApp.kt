@@ -32,27 +32,7 @@ class MainApp : Application(), AnkoLogger{
 //        notes = NoteStoreRoom(applicationContext)
 //        visits = VisitStoreRoom(applicationContext)
 
-        user = FirebaseAuth.getInstance().currentUser!!
 
-        if(hillforts is HillfortFirebaseStore) {
-            (hillforts as HillfortFirebaseStore).fetchHillforts {
 
-            }
-        }
-        if(images is ImageFirebaseStore) {
-            (images as ImageFirebaseStore).fetchImages {
-
-            }
-        }
-        if(notes is NoteFirebaseStore) {
-            (notes as NoteFirebaseStore).fetchNotes {
-
-            }
-        }
-        if(visits is VisitFirebaseStore) {
-            (visits as VisitFirebaseStore).fetchVisits {
-
-            }
-        }
     }
 }
