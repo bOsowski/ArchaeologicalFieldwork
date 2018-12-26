@@ -4,6 +4,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
+import org.wit.archaeologicalfieldwork.helpers.hillfortRefreshTime
 import org.wit.archaeologicalfieldwork.views.hillfortMaps.HillfortMapsView
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.stores.firebase.HillfortFirebaseStore
@@ -28,7 +29,7 @@ class HillfortListPresenter(view: BaseView) : BasePresenter(view){
             Timer().schedule(timerTask {
                 (app.hillforts as HillfortFirebaseStore).fetchHillforts {  }
                 loadHillforts()
-            }, 0, 1000)
+            }, 0, hillfortRefreshTime)
         }
     }
 

@@ -20,6 +20,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.intentFor
+import org.wit.archaeologicalfieldwork.helpers.noteRefreshTime
 import org.wit.archaeologicalfieldwork.helpers.simplifyDate
 import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
 import org.wit.archaeologicalfieldwork.models.stores.firebase.NoteFirebaseStore
@@ -86,7 +87,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
                     (app.notes as NoteFirebaseStore).fetchNotes { }
                     showNotes()
                 }
-            }, 0, 1000)
+            }, 0, noteRefreshTime)
         }
     }
 

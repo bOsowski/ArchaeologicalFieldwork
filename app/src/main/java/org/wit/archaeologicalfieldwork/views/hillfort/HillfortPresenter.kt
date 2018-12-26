@@ -48,7 +48,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
                     (app.images as ImageFirebaseStore).fetchImages { }
                     (view as HillfortView).showImages()
                 }
-            }, 0, 1000)
+            }, 0, imageRefreshTime)
         }
 
         if (view.intent.hasExtra("hillfort_edit")) {
