@@ -15,6 +15,7 @@ import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Image
 import org.wit.archaeologicalfieldwork.views.BaseView
+import java.util.*
 
 class HillfortView : BaseView(), AnkoLogger {
 
@@ -31,7 +32,6 @@ class HillfortView : BaseView(), AnkoLogger {
                 presenter.doSetLocation()
             }
             presenter.doConfigureMap(map)
-            //mapView2.onResume() //this line fixes a bug where the map would not properly load.
         }
 //        The title would obstruct buttons for this view.
 //        toolbarAdd.title = title
@@ -68,15 +68,14 @@ class HillfortView : BaseView(), AnkoLogger {
 
     override fun showHillfort(hillfort: Hillfort){
         val layoutManager = LinearLayoutManager(this)
+        recyclerViewImages.layoutManager = layoutManager
+        hillfortName.setText(hillfort.name)
+        hillfortDescription.setText(hillfort.description)
 
         async(UI) {
-            recyclerViewImages.layoutManager = layoutManager
-
-            hillfortName.setText(hillfort.name)
-            hillfortDescription.setText(hillfort.description)
             val visit = presenter.app.visits.findAll().filter{it.hillfortId == hillfort.id}.find { it.addedBy == (application as MainApp).user.email }
             if(visit != null){
-                visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(visit.date))
+                visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(Date(visit.date)))
             }
             visitedCheckBox.isChecked = visit != null
             showImages(presenter.app.images.findAll().filter { it.hillfortId == hillfort.id })

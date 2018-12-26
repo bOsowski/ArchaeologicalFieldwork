@@ -59,10 +59,10 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
             visit.hillfortId = hillfort.id
             visit.addedBy = app.user.email!!
             if(date != null){
-                visit.date = date!!
+                visit.date = date!!.time
             }
             else{
-                visit.date = Date()
+                visit.date = Date().time
             }
             async(UI) {
                 app.visits.create(visit)
