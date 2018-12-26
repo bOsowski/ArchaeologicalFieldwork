@@ -2,6 +2,7 @@ package org.wit.archaeologicalfieldwork.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -31,18 +32,21 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 visitedHillforts += app.visits.findAll().filter { it.addedBy == app.user?.email }.size
             }
+
+            email.setText(app.user?.email)
+            email.invalidate()
+            password.setText("")
+            password.invalidate()
+
+            hillforts_visited_settings.text = resources.getString(R.string.hillforts_added_settings, addedHillforts.toString())
+            hillforts_added_settings.text = resources.getString(R.string.hillforts_visited_settings, visitedHillforts.toString())
+            hillforts_total.text = resources.getString(R.string.hillforts_total, totalHillforts.toString())
         }
 
-        email.setText(app.user?.email)
-        email.invalidate()
-        password.setText("")
-        password.invalidate()
 
-        hillforts_visited_settings.text = resources.getString(R.string.hillforts_added_settings, addedHillforts.toString())
-        hillforts_added_settings.text = resources.getString(R.string.hillforts_visited_settings, visitedHillforts.toString())
-        hillforts_total.text = resources.getString(R.string.hillforts_total, totalHillforts.toString())
 
         logout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
             startActivity(intentFor<LoginActivity>())
         }
 

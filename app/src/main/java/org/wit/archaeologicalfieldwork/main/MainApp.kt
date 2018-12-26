@@ -14,7 +14,6 @@ class MainApp : Application(), AnkoLogger{
     lateinit var notes: NoteStoreRoom
     lateinit var visits: VisitStoreRoom
     lateinit var user: FirebaseUser
-//    lateinit var currentFort: Hillfort
 
     override fun onCreate() {
         super.onCreate()

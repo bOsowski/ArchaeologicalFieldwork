@@ -37,11 +37,6 @@ class HillfortListView : BaseView(), HillfortListener {
         presenter = initPresenter(HillfortListPresenter(this)) as HillfortListPresenter
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        async(UI){
-            info("Current user id = ${presenter.app.user?.email}")
-            presenter.app.hillforts.create(Hillfort(name = "Test :3", addedBy = presenter.app.user?.email!!))
-
-        }
         presenter.loadHillforts()
         settings.setOnClickListener {
             startActivity(intentFor<SettingsActivity>())

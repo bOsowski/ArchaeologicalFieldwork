@@ -17,11 +17,11 @@ class HillfortMapsPresenter(view: HillfortMapsView) : BasePresenter(view){
         map.uiSettings.isZoomControlsEnabled = true
         async(UI){
             app.hillforts.findAll().forEach{
-                //val options = MarkerOptions().title(it.name).position(LatLng(it.location.lat, it.location.lng))
-                //map.addMarker(options).tag = it.id
-                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.location.lat, it.location.lng), it.location.zoom))
-                //map.setOnMarkerClickListener(view as HillfortMapsView)
+                val options = MarkerOptions().title(it.name).position(LatLng(it.location.lat, it.location.lng))
+                map.addMarker(options).tag = it.id
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.location.lat, it.location.lng), 0f))
             }
+            map.setOnMarkerClickListener(view as HillfortMapsView)
         }
     }
 
