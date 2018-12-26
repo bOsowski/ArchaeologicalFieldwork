@@ -29,10 +29,12 @@ class HillfortMapsPresenter(view: HillfortMapsView) : BasePresenter(view){
         view?.currentTitle!!.text = marker.title
         async(UI) {
             val foundHillfort = app.hillforts.findAll().find { it.id == marker.tag }
-            //todo: fix the below
-//        if(foundHillfort != null && !foundHillfort.images.isEmpty()){
-//            view?.hillfortMapImage!!.setImageBitmap(readImageFromPath(view!!, foundHillfort.images.first()))
-//        }
+            if(foundHillfort != null){
+                val images = app.images.findAll().filter { it.hillfortId == foundHillfort.id }
+                if(!images.isEmpty()){
+                    view?.hillfortMapImage!!.setImageBitmap(readImageFromPath(view!!, images.first().data))
+                }
+            }
             view?.hillfortMapDescription!!.text = foundHillfort?.description
         }
     }
