@@ -18,11 +18,8 @@ import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.helpers.noteRefreshTime
-import org.wit.archaeologicalfieldwork.helpers.simplifyDate
-import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
 import org.wit.archaeologicalfieldwork.models.stores.firebase.NoteFirebaseStore
 import org.wit.archaeologicalfieldwork.views.hillfort.HillfortView
 import java.util.*
@@ -84,8 +81,9 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         if(app.notes is NoteFirebaseStore) {
             Timer().schedule(timerTask {
                 async(UI) {
-                    (app.notes as NoteFirebaseStore).fetchNotes { }
-                    showNotes()
+                    (app.notes as NoteFirebaseStore).fetchNotes {
+                        showNotes()
+                    }
                 }
             }, 0, noteRefreshTime)
         }
@@ -112,7 +110,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.notes_add, menu)
+        menuInflater.inflate(R.menu.menu_notes, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

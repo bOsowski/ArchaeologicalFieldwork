@@ -45,6 +45,7 @@ abstract class BaseView : AppCompatActivity(), AnkoLogger, ImageListener {
 
     fun init(toolbar: Toolbar){
         toolbar.title = title
+
         setSupportActionBar(toolbar)
     }
 

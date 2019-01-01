@@ -10,44 +10,11 @@
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarAdd"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:background="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_constraintTop_toTopOf="parent"/>
-    <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"
-            android:elevation="0dp"
-            android:text="@string/cancel"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/toolbarAdd" android:layout_marginTop="4dp"/>
 
-    <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"
-            android:elevation="0dp"
-            android:text="@string/save"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/cancel"/>
-
-    <Button
-            android:id="@+id/delete"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:background="@android:color/transparent"
-            android:text="@string/delete"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="4dp"/>
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
@@ -55,7 +22,8 @@
             android:background="@color/colorAccent"
             android:fitsSystemWindows="true"
             app:elevation="0dip"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" android:layout_marginTop="8dp"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent">
 
     </com.google.android.material.appbar.AppBarLayout>

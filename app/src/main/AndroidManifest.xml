@@ -34,10 +34,13 @@
         </activity>
         <activity
                 android:name=".views.hillfortList.HillfortListView"
-                android:label="@string/title_activity_main"
+                android:label="@string/title_activity_hillfort_list"
                 android:theme="@style/AppTheme">
         </activity>
-        <activity android:name=".views.hillfort.HillfortView">
+        <activity
+          android:name=".views.hillfort.HillfortView"
+          android:label="@string/title_activity_hillfort"
+          android:theme="@style/AppTheme">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

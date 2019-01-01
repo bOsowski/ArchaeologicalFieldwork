@@ -48,8 +48,13 @@
     <string name="button_view_notes">View Notes</string>
     <string name="notes_addNote">Add Note</string>
     <string name="hillforts_total">Hillforts in database: %1$s.</string>
-    <string name="title_activity_hillfort_maps">Map of All Hillforts</string>
+    <string name="title_activity_hillfort_maps">Map of Hillforts</string>
     <string name="hillfort_image">Hillfort Image</string>
     <string name="hillfortLat">Lat: %1$.6f</string>
     <string name="hillfortLng">Lng: %1$.6f</string>
+    <string name="settings">Settings</string>
+
+    <string name="title_activity_hillfort_list">Hillforts</string>
+    <string name="title_activity_hillfort">Hillfort</string>
+    <string name="title_activity_edit_location">Hillfort</string>
 </resources>

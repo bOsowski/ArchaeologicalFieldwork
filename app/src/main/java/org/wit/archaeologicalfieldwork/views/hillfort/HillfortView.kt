@@ -2,6 +2,8 @@ package org.wit.archaeologicalfieldwork.views.hillfort
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.coroutines.experimental.android.UI
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_hillfort.*
@@ -33,31 +35,21 @@ class HillfortView : BaseView(), AnkoLogger {
             }
             presenter.doConfigureMap(map)
         }
-//        The title would obstruct buttons for this view.
-//        toolbarAdd.title = title
-//        setSupportActionBar(toolbarAdd)
+
+        toolbarAdd.title = title
+        setSupportActionBar(toolbarAdd)
 
         presenter = initPresenter(HillfortPresenter(this)) as HillfortPresenter
 
-        cancel.setOnClickListener{
-            presenter.doCancel()
-        }
-
         visitedCheckBox.setOnClickListener {
             presenter.doSetVisited()
-        }
-
-        btnSave.setOnClickListener {
-            presenter.doAddOrSave()
         }
 
         chooseImage.setOnClickListener {
             presenter.doSelectImage()
         }
 
-        delete.setOnClickListener {
-            presenter.doDelete()
-        }
+
 
         viewNotes.setOnClickListener {
             info("View notes clicked.")
@@ -65,6 +57,20 @@ class HillfortView : BaseView(), AnkoLogger {
             finish()
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_hillfort, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.item_save -> presenter.doAddOrSave()
+            R.id.item_cancel -> presenter.doCancel()
+            R.id.item_delete -> presenter.doDelete()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun showHillfort(hillfort: Hillfort){

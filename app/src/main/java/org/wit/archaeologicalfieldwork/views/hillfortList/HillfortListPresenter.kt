@@ -5,6 +5,7 @@ import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
+import org.wit.archaeologicalfieldwork.activities.SettingsActivity
 import org.wit.archaeologicalfieldwork.helpers.hillfortRefreshTime
 import org.wit.archaeologicalfieldwork.views.hillfortMaps.HillfortMapsView
 import org.wit.archaeologicalfieldwork.models.Hillfort
@@ -51,5 +52,9 @@ class HillfortListPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
 
     fun doShowHillfortsMap(){
         view?.startActivity<HillfortMapsView>()
+    }
+
+    fun doViewSettings(){
+        view?.startActivity<SettingsActivity>()
     }
 }
