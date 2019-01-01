@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.stores.Store
 
@@ -54,6 +55,7 @@ class HillfortFirebaseStore(val context: Context) : Store<Hillfort>, AnkoLogger 
                 hillforts.clear()
                 dataSnapshot.children.mapNotNullTo(hillforts) {it.getValue<Hillfort>(Hillfort::class.java)}
                 hillfortsReady()
+                info("Hillforts ready. fetched ${hillforts.size} hillforts.")
             }
         }
         userId = FirebaseAuth.getInstance().currentUser!!.uid

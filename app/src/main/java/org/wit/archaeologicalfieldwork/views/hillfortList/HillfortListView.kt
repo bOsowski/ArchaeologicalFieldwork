@@ -50,6 +50,8 @@ class HillfortListView : BaseView(), HillfortListener {
     override fun showHillforts(hillforts: List<Hillfort>){
         val listener = this
         async(UI){
+            info("about to show ${hillforts.size} hillforts.")
+            //images might not load instantly, but this is fine since it might take a while to load them and the app is usable until then.
             recyclerView.adapter = HillfortAdapter(hillforts, presenter.app.images.findAll(), listener)
             recyclerView.adapter?.notifyDataSetChanged()
         }
