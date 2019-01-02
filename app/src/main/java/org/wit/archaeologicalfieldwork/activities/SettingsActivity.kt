@@ -27,16 +27,14 @@ class SettingsActivity : AppCompatActivity() {
         async(UI) {
             app.hillforts.findAll().forEach {
                 totalHillforts++
-                if (it.addedBy == app.user?.email){
+                if (it.addedBy == app.user.email){
                     addedHillforts++
                 }
-                visitedHillforts += app.visits.findAll().filter { it.addedBy == app.user?.email }.size
+                visitedHillforts += app.visits.findAll().filter { it.addedBy == app.user.email }.size
             }
 
-            email.setText(app.user?.email)
+            email.setText(app.user.email)
             email.invalidate()
-            password.setText("")
-            password.invalidate()
 
             hillforts_visited_settings.text = resources.getString(R.string.hillforts_added_settings, addedHillforts.toString())
             hillforts_added_settings.text = resources.getString(R.string.hillforts_visited_settings, visitedHillforts.toString())
@@ -48,15 +46,6 @@ class SettingsActivity : AppCompatActivity() {
         logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             startActivity(intentFor<LoginActivity>())
-        }
-
-        save_user_settings.setOnClickListener {
-            //todo: remove this functinality
-//            app.user?.email.set = email.text.toString()
-//            user.password = password.text.toString()
-//            async(UI) {
-//                app.users.update(user)
-//            }
         }
     }
 

@@ -16,4 +16,9 @@
       android:id="@+id/item_cancel"
       android:title="@string/cancel"
       app:showAsAction="never"/>
+
+    <item
+      android:id="@+id/item_share"
+      android:title="@string/share"
+      app:showAsAction="never"/>
 </menu>
