@@ -280,10 +280,10 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         var shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "text/plain"
         var shareBody = "Check out this hillfort!"
-        var shareSubject = "${hillfort.name}\n"
+        var shareSubject = "${hillfort.name}\nhttp://maps.google.com/maps?z=12&t=m&q=${hillfort.location.lat},${hillfort.location.lng}\n\n"
         async(UI){
             app.images.findAll().filter { it.hillfortId == hillfort.id }.forEach {
-                shareSubject += it.data  + "\n"
+                shareSubject += it.data  + "\n\n"
             }
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody)
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareSubject)
