@@ -3,6 +3,11 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
+    android:id="@+id/app_bar_search"
+    app:showAsAction="always"
+    android:icon="@drawable/ic_search_black_24dp"
+    android:title="Search" app:actionViewClass="android.widget.SearchView"/>
+  <item
     android:id="@+id/item_add"
     android:title="@string/menu_addHillfort"
     app:showAsAction="never"/>
@@ -16,4 +21,7 @@
     android:id="@+id/item_settings"
     android:title="@string/settings"
     app:showAsAction="never"/>
+  <item app:showAsAction="always" android:checkable="true"
+        android:icon="@android:drawable/star_big_off" android:id="@+id/filterFavourites" android:checked="false"
+        android:title=""/>
 </menu>

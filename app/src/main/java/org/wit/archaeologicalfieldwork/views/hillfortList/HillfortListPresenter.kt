@@ -1,11 +1,14 @@
 package org.wit.archaeologicalfieldwork.views.hillfortList
 
+import android.view.MenuItem
+import android.widget.Checkable
 import android.widget.ImageButton
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
+import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.activities.SettingsActivity
 import org.wit.archaeologicalfieldwork.helpers.hillfortRefreshTime
 import org.wit.archaeologicalfieldwork.models.Favourite
@@ -24,9 +27,20 @@ import kotlin.concurrent.timerTask
 
 class HillfortListPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
 
+    var filterFavourites = false
+
     fun loadHillforts(){
      async(UI){
-        view?.showHillforts(app.hillforts.findAll())
+         if(filterFavourites){
+             val hillfortsToShow = ArrayList<Long>()
+             app.favourites.findAll().filter { it.addedBy == app.user.email }.forEach {
+                 hillfortsToShow.add(it.hillfortId)
+             }
+             view?.showHillforts(app.hillforts.findAll().filter { hillfort ->  hillfortsToShow.contains(hillfort.id)})
+         }
+         else{
+             view?.showHillforts(app.hillforts.findAll())
+         }
      }
     }
 
@@ -83,5 +97,17 @@ class HillfortListPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
                 favouriteButton.setImageResource(android.R.drawable.star_big_off)
             }
         }
+    }
+
+    fun doFilterFavourites(item: MenuItem) {
+        item.isChecked = !item.isChecked
+        if(item.isChecked){
+            item.setIcon(android.R.drawable.star_big_on)
+        }
+        else{
+            item.setIcon(android.R.drawable.star_big_off)
+        }
+        filterFavourites = item.isChecked
+        loadHillforts()
     }
 }
