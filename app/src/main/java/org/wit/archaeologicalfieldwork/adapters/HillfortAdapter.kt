@@ -32,16 +32,22 @@ class HillfortAdapter constructor(private var hillforts: List<Hillfort>, private
         if(!images.isEmpty()){
             image = images.first()
         }
-        var rating = -1f
+        var rating = 0f
         val ratingsForHillfort = ratings.filter { it.hillfortId == hillfort.id }
+
         ratingsForHillfort.forEach {
-            if(it.rating != -1){
+            if(it.rating > 0f){
                 rating += it.rating
             }
         }
+
         if(!ratingsForHillfort.isEmpty()){
             rating /= ratingsForHillfort.size
         }
+        else{
+            rating = -1f
+        }
+
         holder.bind(hillfort, image, !favourites.filter { it.hillfortId == hillfort.id && it.addedBy == FirebaseAuth.getInstance().currentUser!!.email }.isEmpty(), rating, listener)
     }
 

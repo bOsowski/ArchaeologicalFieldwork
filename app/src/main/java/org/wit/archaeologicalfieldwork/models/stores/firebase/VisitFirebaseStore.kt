@@ -48,6 +48,7 @@ class VisitFirebaseStore(val context: Context) : Store<Visit>, AnkoLogger {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                visits.clear()
                 dataSnapshot.children.mapNotNullTo(visits) {it.getValue<Visit>(Visit::class.java)}
                 visitsReady()
             }

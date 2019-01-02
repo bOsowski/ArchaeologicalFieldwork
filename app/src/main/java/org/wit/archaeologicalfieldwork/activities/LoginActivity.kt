@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
         //todo: remove the below
         startActivity(intentFor<HillfortListView>())
-        val testEmail = "test3@test.test"
+        val testEmail = "test5@test.test"
         val testPassword = "test2Password"
 
 

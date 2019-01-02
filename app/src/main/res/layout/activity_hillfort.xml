@@ -58,25 +58,24 @@
             android:layout_marginStart="8dp" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/hillfortLng"/>
     <CheckBox
-            android:text="@string/visited"
-            android:layout_width="0dp"
-            android:layout_height="0dp" android:id="@+id/visitedCheckBox"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/viewNotes" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/mapView2" app:layout_constraintStart_toEndOf="@+id/viewNotes"
-            android:layout_marginStart="8dp"/>
+      android:text="@string/visited"
+      android:layout_width="80dp"
+      android:layout_height="0dp" android:id="@+id/visitedCheckBox"
+      app:layout_constraintBottom_toBottomOf="@+id/chooseImage"
+      android:layout_marginBottom="8dp" android:layout_marginTop="8dp"
+      app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+      app:layout_constraintStart_toStartOf="@+id/ratingBar" android:layout_marginStart="0dp"/>
     <Button
-            android:id="@+id/chooseImage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="@string/button_addImage"
-            android:textColor="@color/colorWhite"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/viewNotes" android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+      android:id="@+id/chooseImage"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:background="@color/colorPrimary"
+      android:text="@string/button_addImage"
+      android:textColor="@color/colorWhite"
+      android:textSize="16sp"
+      app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
+      app:layout_constraintTop_toBottomOf="@+id/viewNotes" android:layout_marginStart="8dp"
+    />
     <Button
             android:id="@+id/viewNotes"
             android:layout_width="150dp"
@@ -123,4 +122,12 @@
             android:id="@+id/hillfortLng" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/hillfortDescription"
             app:layout_constraintTop_toTopOf="@+id/hillfortDescription"/>
+    <RatingBar
+      android:layout_width="192dp"
+      android:layout_height="47dp"
+      android:stepSize="1"
+      android:numStars="4"
+      android:id="@+id/ratingBar" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+      android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/mapView2"
+      android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/viewNotes"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

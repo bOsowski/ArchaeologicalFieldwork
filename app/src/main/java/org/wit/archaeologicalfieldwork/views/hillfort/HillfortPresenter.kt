@@ -17,10 +17,7 @@ import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.*
 import org.wit.archaeologicalfieldwork.R
 import org.wit.archaeologicalfieldwork.helpers.*
-import org.wit.archaeologicalfieldwork.models.Hillfort
-import org.wit.archaeologicalfieldwork.models.Image
-import org.wit.archaeologicalfieldwork.models.Location
-import org.wit.archaeologicalfieldwork.models.Visit
+import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
 import org.wit.archaeologicalfieldwork.views.*
 import java.text.SimpleDateFormat
@@ -70,7 +67,27 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         hillfort.name = view?.hillfortName!!.text.toString()
         hillfort.description = view?.hillfortDescription!!.text.toString()
         hillfort.addedBy = app.user.email!!
-        //info("hillfort.added")
+
+        if(view?.ratingBar!!.rating != 0f){
+            async(UI) {
+                var rating = Rating(hillfortId = hillfort.id, addedBy = app.user.email!!, rating = view?.ratingBar!!.rating)
+                if(app.ratings.findAll().filter { it.hillfortId == hillfort.id && it.addedBy == app.user.email!! }.isEmpty()){
+                        app.ratings.create(rating)
+                }
+                else{
+                        app.ratings.update(rating)
+                }
+            }
+        }
+        else{
+            async(UI){
+                var ratingToDelete: Rating? = app.ratings.findAll().filter { it.hillfortId == hillfort.id }.find { it.addedBy == app.user.email!! }
+                if(ratingToDelete != null){
+                    app.ratings.delete(ratingToDelete)
+                }
+            }
+        }
+
         if(view?.visitedCheckBox!!.isChecked){
             val visit = Visit()
             visit.hillfortId = hillfort.id
@@ -121,6 +138,13 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
                 app.notes.findAll().filter { it.hillfortId == hillfort.id }.forEach {
                     app.notes.delete(it)
                 }
+                app.favourites.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                    app.favourites.delete(it)
+                }
+                app.ratings.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                    app.ratings.delete(it)
+                }
+
             app.hillforts.delete(hillfort)
             view?.finish()
         }

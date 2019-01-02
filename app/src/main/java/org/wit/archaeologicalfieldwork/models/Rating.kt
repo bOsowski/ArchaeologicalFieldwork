@@ -14,7 +14,7 @@ data class Rating(
     var fbId : String = "",
     var date: Long = Date().time,
     var hillfortId: Long = 0,
-    var rating: Int = -1,
+    var rating: Float = -1f,
     var addedBy: String = "",
     @PrimaryKey(autoGenerate = true) var id: Long = 0
     ) : Parcelable

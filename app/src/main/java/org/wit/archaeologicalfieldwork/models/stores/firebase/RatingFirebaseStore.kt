@@ -48,6 +48,7 @@ class RatingFirebaseStore(val context: Context) : Store<Rating>, AnkoLogger {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                ratings.clear()
                 dataSnapshot.children.mapNotNullTo(ratings) {it.getValue<Rating>(Rating::class.java)}
                 ratingsReady()
             }
