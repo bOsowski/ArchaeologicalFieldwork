@@ -4,6 +4,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ShareActionProvider
+import androidx.core.view.MenuItemCompat
 import kotlinx.coroutines.experimental.android.UI
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_hillfort.*
@@ -22,7 +24,7 @@ class HillfortView : BaseView() {
 
     private lateinit var presenter: HillfortPresenter
     lateinit var map: GoogleMap
-
+    var mShareActionProvider: ShareActionProvider? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,16 +61,23 @@ class HillfortView : BaseView() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_hillfort, menu)
+
+        menu.findItem(R.id.action_share).also { menuItem ->
+            // Fetch and store ShareActionProvider
+            mShareActionProvider = MenuItemCompat.getActionProvider(menuItem) as? ShareActionProvider
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.item_save -> presenter.doAddOrSave()
             R.id.item_cancel -> presenter.doCancel()
             R.id.item_delete -> presenter.doDelete()
+            R.id.action_share -> presenter.doShare()
         }
         return super.onOptionsItemSelected(item)
     }

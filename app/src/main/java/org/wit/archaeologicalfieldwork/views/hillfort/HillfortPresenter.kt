@@ -275,4 +275,19 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
             locationUpdate(Location(it.latitude, it.longitude, 15f))
         }
     }
+
+    fun doShare() {
+        var shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        var shareBody = "Check out this hillfort!"
+        var shareSubject = "${hillfort.name}\n"
+        async(UI){
+            app.images.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                shareSubject += it.data  + "\n"
+            }
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareSubject)
+            view?.startActivity(Intent.createChooser(shareIntent, "Share using"))
+        }
+    }
 }
