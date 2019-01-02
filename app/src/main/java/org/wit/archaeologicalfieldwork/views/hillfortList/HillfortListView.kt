@@ -25,7 +25,7 @@ import org.wit.archaeologicalfieldwork.models.Favourite
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.views.BaseView
 
-class HillfortListView : BaseView(), HillfortListener {
+class HillfortListView : BaseView(), HillfortListener, SearchView.OnQueryTextListener {
 
     lateinit var presenter: HillfortListPresenter
 
@@ -58,10 +58,8 @@ class HillfortListView : BaseView(), HillfortListener {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_hillfort_list, menu)
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu?.findItem(R.id.app_bar_search)?.actionView as SearchView).apply{
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        }
+        val searchView = menu!!.findItem(R.id.app_bar_search).actionView as SearchView
+        searchView.setOnQueryTextListener(this)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -83,5 +81,23 @@ class HillfortListView : BaseView(), HillfortListener {
 
     override fun onFavouriteClick(hillfort: Hillfort, favouriteButton: ImageButton) {
         presenter.doSetAsFavourite(hillfort, favouriteButton)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        val userInput = newText?.toLowerCase() as String
+        val list = ArrayList<Hillfort>()
+        async(UI){
+            presenter.app.hillforts.findAll().forEach {
+                if(it.name.toLowerCase().contains(userInput)){
+                    list.add(it)
+                }
+            }
+            presenter.doShowFilteredHillforts(list)
+        }
+        return false
     }
 }

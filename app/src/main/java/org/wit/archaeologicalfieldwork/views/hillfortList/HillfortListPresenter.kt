@@ -31,17 +31,23 @@ class HillfortListPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
 
     fun loadHillforts(){
      async(UI){
-         if(filterFavourites){
-             val hillfortsToShow = ArrayList<Long>()
-             app.favourites.findAll().filter { it.addedBy == app.user.email }.forEach {
-                 hillfortsToShow.add(it.hillfortId)
-             }
-             view?.showHillforts(app.hillforts.findAll().filter { hillfort ->  hillfortsToShow.contains(hillfort.id)})
-         }
-         else{
-             view?.showHillforts(app.hillforts.findAll())
-         }
+         doShowFilteredHillforts(app.hillforts.findAll())
      }
+    }
+
+    fun doShowFilteredHillforts(hillforts: List<Hillfort>){
+        async(UI) {
+            if(filterFavourites){
+                val hillfortsToShow = ArrayList<Long>()
+                app.favourites.findAll().filter { it.addedBy == app.user.email }.forEach {
+                    hillfortsToShow.add(it.hillfortId)
+                }
+                view?.showHillforts(hillforts.filter { hillfort ->  hillfortsToShow.contains(hillfort.id)})
+            }
+            else{
+                view?.showHillforts(hillforts)
+            }
+        }
     }
 
     init{
