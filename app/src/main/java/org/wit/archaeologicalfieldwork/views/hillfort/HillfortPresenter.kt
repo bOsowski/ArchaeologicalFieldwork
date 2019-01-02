@@ -21,14 +21,13 @@ import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Image
 import org.wit.archaeologicalfieldwork.models.Location
 import org.wit.archaeologicalfieldwork.models.Visit
-import org.wit.archaeologicalfieldwork.models.stores.firebase.HillfortFirebaseStore
 import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
 import org.wit.archaeologicalfieldwork.views.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.timerTask
 
-class HillfortPresenter(view: BaseView) : BasePresenter(view){
+class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
 
     val locationRequest = createDefaultLocationRequest()
     var defaultLocation = Location(52.245696, -7.139102, 15f)
@@ -71,7 +70,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view){
         hillfort.name = view?.hillfortName!!.text.toString()
         hillfort.description = view?.hillfortDescription!!.text.toString()
         hillfort.addedBy = app.user.email!!
-
+        //info("hillfort.added")
         if(view?.visitedCheckBox!!.isChecked){
             val visit = Visit()
             visit.hillfortId = hillfort.id

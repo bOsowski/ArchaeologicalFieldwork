@@ -18,7 +18,7 @@ import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.views.BaseView
 import java.util.*
 
-class HillfortView : BaseView(), AnkoLogger {
+class HillfortView : BaseView() {
 
     private lateinit var presenter: HillfortPresenter
     lateinit var map: GoogleMap

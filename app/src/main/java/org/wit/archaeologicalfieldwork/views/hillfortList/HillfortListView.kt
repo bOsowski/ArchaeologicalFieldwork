@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageButton
 import kotlinx.android.synthetic.main.activity_hillfort_list.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -15,10 +16,15 @@ import org.wit.archaeologicalfieldwork.R.id.item_settings
 import org.wit.archaeologicalfieldwork.activities.SettingsActivity
 import org.wit.archaeologicalfieldwork.adapters.HillfortAdapter
 import org.wit.archaeologicalfieldwork.adapters.HillfortListener
+import org.wit.archaeologicalfieldwork.models.Favourite
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.views.BaseView
 
 class HillfortListView : BaseView(), HillfortListener {
+
+    override fun onFavouriteClick(hillfort: Hillfort, favouriteButton: ImageButton) {
+        presenter.doSetAsFavourite(hillfort, favouriteButton)
+    }
 
     lateinit var presenter: HillfortListPresenter
 
@@ -44,7 +50,7 @@ class HillfortListView : BaseView(), HillfortListener {
         async(UI){
             info("about to show ${hillforts.size} hillforts.")
             //images might not load instantly, but this is fine since it might take a while to load them and the app is usable until then.
-            recyclerView.adapter = HillfortAdapter(hillforts, presenter.app.images.findAll(), listener)
+            recyclerView.adapter = HillfortAdapter(hillforts, presenter.app.images.findAll(), presenter.app.ratings.findAll(), presenter.app.favourites.findAll(), listener)
             recyclerView.adapter?.notifyDataSetChanged()
         }
     }

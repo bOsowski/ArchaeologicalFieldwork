@@ -28,10 +28,7 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.main.MainApp
 import org.wit.archaeologicalfieldwork.R
-import org.wit.archaeologicalfieldwork.models.stores.firebase.HillfortFirebaseStore
-import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
-import org.wit.archaeologicalfieldwork.models.stores.firebase.NoteFirebaseStore
-import org.wit.archaeologicalfieldwork.models.stores.firebase.VisitFirebaseStore
+import org.wit.archaeologicalfieldwork.models.stores.firebase.*
 import org.wit.archaeologicalfieldwork.views.hillfortList.HillfortListView
 
 /**
@@ -56,7 +53,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
         //todo: remove the below
         startActivity(intentFor<HillfortListView>())
-        val testEmail = "test2@test.test"
+        val testEmail = "test3@test.test"
         val testPassword = "test2Password"
 
 
@@ -73,7 +70,16 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                 info("##### Successfully logged in")
                 app.user = FirebaseAuth.getInstance().currentUser!!
 
+                if(app.ratings is RatingFirebaseStore) {
+                    (app.ratings as RatingFirebaseStore).fetchRatings {
 
+                    }
+                }
+                if(app.favourites is FavouriteFirebaseStore) {
+                    (app.favourites as FavouriteFirebaseStore).fetchFavourites {
+
+                    }
+                }
                 if(app.hillforts is HillfortFirebaseStore) {
                     (app.hillforts as HillfortFirebaseStore).fetchHillforts {
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:layout_marginBottom="8dp"
   android:elevation="24dp">
@@ -20,27 +20,39 @@
             android:layout_marginRight="16dp" android:contentDescription="image"/>
 
     <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/image"
-            android:textSize="30sp" android:text="empty"
-            android:layout_marginStart="8dp" android:layout_marginTop="4dp"
-            android:layout_below="@+id/hillfortAddedBy"/>
+      android:id="@+id/name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toEndOf="@+id/image"
+      android:textSize="30sp" android:text="name"
+      android:layout_marginStart="8dp" android:layout_marginTop="4dp"
+      android:layout_below="@+id/hillfortAddedBy"/>
 
     <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/image" android:text="empty" android:layout_marginTop="4dp"
-            android:layout_below="@+id/name" android:layout_toEndOf="@+id/image" android:layout_marginStart="8dp"/>
+      android:id="@+id/description"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@+id/image" android:text="description" android:layout_marginTop="4dp"
+      android:layout_below="@+id/name" android:layout_toEndOf="@+id/image" android:layout_marginStart="8dp"/>
     <TextView
-            android:id="@+id/hillfortAddedBy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/image" android:text="empty"
-            android:layout_marginTop="4dp" android:layout_alignParentTop="true" android:layout_toEndOf="@+id/image"
-            android:layout_marginStart="8dp" android:textSize="10sp"/>
+      android:id="@+id/hillfortAddedBy"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@+id/image" android:text="addedBy"
+      android:layout_marginTop="4dp" android:layout_alignParentTop="true" android:layout_toEndOf="@+id/image"
+      android:layout_marginStart="8dp" android:textSize="10sp"/>
+    <TextView
+      android:id="@+id/overalRating"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@+id/image" android:text="overallRating"
+      android:layout_toEndOf="@+id/image" android:layout_marginStart="8dp"
+      android:layout_marginLeft="23dp" android:layout_marginTop="4dp" android:layout_below="@+id/description"/>
+    <ImageButton
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" app:srcCompat="@android:drawable/btn_star"
+      android:layout_alignParentEnd="true" android:layout_marginEnd="8dp"
+      android:id="@+id/favouriteButton" android:layout_alignTop="@+id/name"/>
 
   </RelativeLayout>
 </androidx.cardview.widget.CardView>

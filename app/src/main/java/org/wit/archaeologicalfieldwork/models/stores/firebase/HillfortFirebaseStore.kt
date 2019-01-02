@@ -11,7 +11,6 @@ import org.wit.archaeologicalfieldwork.models.stores.Store
 class HillfortFirebaseStore(val context: Context) : Store<Hillfort>, AnkoLogger {
 
     val hillforts = ArrayList<Hillfort>()
-    lateinit var userId: String
     lateinit var db: DatabaseReference
 
     override suspend fun findAll(): List<Hillfort> {
@@ -58,7 +57,6 @@ class HillfortFirebaseStore(val context: Context) : Store<Hillfort>, AnkoLogger 
                 info("Hillforts ready. fetched ${hillforts.size} hillforts.")
             }
         }
-        userId = FirebaseAuth.getInstance().currentUser!!.uid
         db = FirebaseDatabase.getInstance().reference
         db.child("hillforts").addListenerForSingleValueEvent(valueEvenListener)
     }

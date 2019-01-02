@@ -10,7 +10,6 @@ import org.wit.archaeologicalfieldwork.models.stores.Store
 class NoteFirebaseStore(val context: Context) : Store<Note>, AnkoLogger {
 
     val notes = ArrayList<Note>()
-    lateinit var userId: String
     lateinit var db: DatabaseReference
 
     override suspend fun findAll(): List<Note> {
@@ -55,7 +54,6 @@ class NoteFirebaseStore(val context: Context) : Store<Note>, AnkoLogger {
                 notesReady()
             }
         }
-        userId = FirebaseAuth.getInstance().currentUser!!.uid
         db = FirebaseDatabase.getInstance().reference
         db.child("notes").addListenerForSingleValueEvent(valueEvenListener)
     }

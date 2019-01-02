@@ -6,10 +6,7 @@ import com.google.firebase.auth.FirebaseUser
 import org.jetbrains.anko.AnkoLogger
 import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.Store
-import org.wit.archaeologicalfieldwork.models.stores.firebase.HillfortFirebaseStore
-import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
-import org.wit.archaeologicalfieldwork.models.stores.firebase.NoteFirebaseStore
-import org.wit.archaeologicalfieldwork.models.stores.firebase.VisitFirebaseStore
+import org.wit.archaeologicalfieldwork.models.stores.firebase.*
 import org.wit.archaeologicalfieldwork.models.stores.room.*
 
 class MainApp : Application(), AnkoLogger{
@@ -18,7 +15,11 @@ class MainApp : Application(), AnkoLogger{
     lateinit var images: Store<Image>
     lateinit var notes: Store<Note>
     lateinit var visits: Store<Visit>
+    lateinit var ratings: Store<Rating>
+    lateinit var favourites: Store<Favourite>
     lateinit var user: FirebaseUser
+
+
 
     override fun onCreate() {
         super.onCreate()
@@ -26,6 +27,9 @@ class MainApp : Application(), AnkoLogger{
         images = ImageFirebaseStore(applicationContext)
         notes = NoteFirebaseStore(applicationContext)
         visits = VisitFirebaseStore(applicationContext)
+        ratings = RatingFirebaseStore(applicationContext)
+        favourites = FavouriteFirebaseStore(applicationContext)
+
 
         //hillforts = HillfortStoreRoom(applicationContext)
 //        images = ImageStoreRoom(applicationContext)
