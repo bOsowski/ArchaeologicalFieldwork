@@ -1,29 +1,23 @@
 package org.wit.archaeologicalfieldwork.views.hillfortList
 
-import android.app.SearchManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Checkable
 import android.widget.ImageButton
 import android.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_hillfort_list.*
-import kotlinx.android.synthetic.main.card_hillfort.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
 import org.wit.archaeologicalfieldwork.R
-import org.wit.archaeologicalfieldwork.R.id.item_settings
-import org.wit.archaeologicalfieldwork.activities.SettingsActivity
 import org.wit.archaeologicalfieldwork.adapters.HillfortAdapter
 import org.wit.archaeologicalfieldwork.adapters.HillfortListener
-import org.wit.archaeologicalfieldwork.models.Favourite
 import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.views.BaseView
+
 
 class HillfortListView : BaseView(), HillfortListener, SearchView.OnQueryTextListener {
 
@@ -56,10 +50,15 @@ class HillfortListView : BaseView(), HillfortListener, SearchView.OnQueryTextLis
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_hillfort_list, menu)
-        val searchView = menu!!.findItem(R.id.app_bar_search).actionView as SearchView
+        val searchView = menu.findItem(R.id.app_bar_search).actionView as SearchView
         searchView.setOnQueryTextListener(this)
+        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            presenter.loadHillforts()
+            swipeRefreshLayout.isRefreshing = false
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
