@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.coroutines.experimental.android.UI
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_hillfort.*
@@ -51,7 +52,13 @@ class HillfortView : BaseView() {
             presenter.doSelectImage()
         }
 
+        takePicture.setOnClickListener {
+            presenter.doTakePicture()
+        }
 
+        refresh.setOnClickListener {
+            presenter.doShowImages()
+        }
 
         viewNotes.setOnClickListener {
             info("View notes clicked.")

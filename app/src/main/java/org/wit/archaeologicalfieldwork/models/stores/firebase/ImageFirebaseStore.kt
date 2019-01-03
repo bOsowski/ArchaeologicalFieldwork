@@ -39,6 +39,16 @@ class ImageFirebaseStore(val context: Context) : Store<Image>, AnkoLogger {
         return item.id
     }
 
+    suspend fun create(item: Image, bitmap: Bitmap): Long {
+        val key = db.child("images").push().key
+        item.fbId = key!!
+        item.id = key.hashCode().toLong()
+        images.add(item)
+        db.child("images").child(key).setValue(item)
+        updateImage(item, bitmap)
+        return item.id
+    }
+
     override suspend fun update(item: Image) {
         var foundImage: Image? = images.find { it.fbId == item.fbId }
         if(foundImage != null){
@@ -90,6 +100,27 @@ class ImageFirebaseStore(val context: Context) : Store<Image>, AnkoLogger {
                         image.data = it.toString()
                         db.child("images").child(image.fbId).setValue(image)
                     }
+                }
+            }
+        }
+    }
+
+    fun updateImage(image: Image, bitmap: Bitmap) {
+        val imageName = bitmap.hashCode()
+
+        var imageRef = st.child(userId + '/' + imageName)
+        val baos = ByteArrayOutputStream()
+
+        bitmap.let {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            val uploadTask = imageRef.putBytes(data)
+            uploadTask.addOnFailureListener {
+                println(it.message)
+            }.addOnSuccessListener { taskSnapshot ->
+                taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
+                    image.data = it.toString()
+                    db.child("images").child(image.fbId).setValue(image)
                 }
             }
         }

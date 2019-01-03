@@ -54,7 +54,7 @@ class HillfortListView : BaseView(), HillfortListener, SearchView.OnQueryTextLis
         menuInflater.inflate(R.menu.menu_hillfort_list, menu)
         val searchView = menu.findItem(R.id.app_bar_search).actionView as SearchView
         searchView.setOnQueryTextListener(this)
-        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayoutHillfortList)
         swipeRefreshLayout.setOnRefreshListener {
             presenter.loadHillforts()
             swipeRefreshLayout.isRefreshing = false

@@ -2,6 +2,9 @@ package org.wit.archaeologicalfieldwork.views.hillfort
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Parcelable
 import android.widget.DatePicker
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -16,6 +19,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.*
 import org.wit.archaeologicalfieldwork.R
+import org.wit.archaeologicalfieldwork.adapters.ImageAdapter
 import org.wit.archaeologicalfieldwork.helpers.*
 import org.wit.archaeologicalfieldwork.models.*
 import org.wit.archaeologicalfieldwork.models.stores.firebase.ImageFirebaseStore
@@ -36,17 +40,6 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
     var map: GoogleMap? = null
 
     init{
-
-        //show data changes if using firebase
-        if(app.images is ImageFirebaseStore) {
-            Timer().schedule(timerTask {
-                async(UI) {
-                    (app.images as ImageFirebaseStore).fetchImages { }
-                    (view as HillfortView).showImages()
-                }
-            }, 0, imageRefreshTime)
-        }
-
         if (view.intent.hasExtra("hillfort_edit")) {
             editing = true
             hillfort = view.intent.extras.getParcelable("hillfort_edit")
@@ -58,7 +51,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
             if (checkLocationPermissions(view)) {
                 doSetCurrentLocation()
             } else{
-              locationUpdate(defaultLocation)
+                locationUpdate(defaultLocation)
             }
         }
     }
@@ -72,10 +65,10 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
             async(UI) {
                 var rating = Rating(hillfortId = hillfort.id, addedBy = app.user.email!!, rating = view?.ratingBar!!.rating)
                 if(app.ratings.findAll().filter { it.hillfortId == hillfort.id && it.addedBy == app.user.email!! }.isEmpty()){
-                        app.ratings.create(rating)
+                    app.ratings.create(rating)
                 }
                 else{
-                        app.ratings.update(rating)
+                    app.ratings.update(rating)
                 }
             }
         }
@@ -114,7 +107,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
                     app.hillforts.update(hillfort)
                 }
                 view?.finish()
-                }
+            }
         } else{ view?.toast(R.string.no_title_toast) }
     }
 
@@ -129,21 +122,21 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
 
     fun doDelete(){
         async(UI) {
-                app.images.findAll().filter { it.hillfortId == hillfort.id }.forEach {
-                    app.images.delete(it)
-                }
-                app.visits.findAll().filter { it.hillfortId == hillfort.id }.forEach {
-                    app.visits.delete(it)
-                }
-                app.notes.findAll().filter { it.hillfortId == hillfort.id }.forEach {
-                    app.notes.delete(it)
-                }
-                app.favourites.findAll().filter { it.hillfortId == hillfort.id }.forEach {
-                    app.favourites.delete(it)
-                }
-                app.ratings.findAll().filter { it.hillfortId == hillfort.id }.forEach {
-                    app.ratings.delete(it)
-                }
+            app.images.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                app.images.delete(it)
+            }
+            app.visits.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                app.visits.delete(it)
+            }
+            app.notes.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                app.notes.delete(it)
+            }
+            app.favourites.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                app.favourites.delete(it)
+            }
+            app.ratings.findAll().filter { it.hillfortId == hillfort.id }.forEach {
+                app.ratings.delete(it)
+            }
 
             app.hillforts.delete(hillfort)
             view?.finish()
@@ -156,20 +149,30 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         }
     }
 
+    fun doTakePicture() {
+        view?.let{
+            showPictureTaker(view!!, ADD_IMAGE_REQUEST)
+        }
+    }
+
     fun doSetLocation() {
         view?.navigateTo(VIEW.LOCATION, LOCATION_REQUEST, "location", hillfort.location)
     }
 
     override fun doActivityResult(requestCode: Int, data: Intent?){
-        async(UI) {
-            (view as HillfortView).showImages()
-        }
         when(requestCode){
             ADD_IMAGE_REQUEST -> {
                 if(data != null){
                     async(UI) {
-                        val image = Image(hillfortId = hillfort.id, data = data.data.toString(), addedBy = app.user.email!!)
-                        image.id = app.images.create(image)
+                        if(data.data != null){
+                            val image = Image(hillfortId = hillfort.id, data = data.data.toString(), addedBy = app.user.email!!)
+                            image.id = app.images.create(image)
+                        }else{
+                            if(app.images is ImageFirebaseStore){
+                                val image = Image(hillfortId = hillfort.id, data = "", addedBy = app.user.email!!)
+                                image.id = (app.images as ImageFirebaseStore).create(image, data.extras!!.getParcelable("data")!!)
+                            }
+                        }
                     }
                 }
             }
@@ -191,6 +194,17 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
                     locationUpdate(hillfort.location)
                     hillfort.location = data.extras.getParcelable("location")
                 }
+            }
+        }
+        async(UI) {
+            (view as HillfortView).showImages()
+        }
+    }
+
+    fun doShowImages(){
+        if(app.images is ImageFirebaseStore) {
+            async(UI) {
+                (app.images as ImageFirebaseStore).fetchImages { (view as HillfortView).showImages() }
             }
         }
     }
