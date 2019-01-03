@@ -30,19 +30,17 @@ class HillfortListPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
             (app.ratings as RatingFirebaseStore).fetchRatings {
                 (app.favourites as FavouriteFirebaseStore).fetchFavourites {
                     (app.hillforts as HillfortFirebaseStore).fetchHillforts {
-                        async(UI) {
-                            doShowFilteredHillforts(app.hillforts.findAll())
+                        (app.images as ImageFirebaseStore).fetchImages {
+                            async(UI) {
+                                doShowFilteredHillforts(app.hillforts.findAll())
+                            }
                         }
                     }
                 }
             }
             //if images fetch before hillforts do, they will be simply loaded in and ready for when hillforts do, but this is unlikely.
             //if images fetch after hillforts, the view will simply reload with loaded images.
-            (app.images as ImageFirebaseStore).fetchImages {
-                async(UI) {
-                    doShowFilteredHillforts(app.hillforts.findAll())
-                }
-            }
+
         }
     }
 

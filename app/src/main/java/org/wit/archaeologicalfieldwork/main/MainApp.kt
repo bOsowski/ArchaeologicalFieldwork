@@ -30,6 +30,7 @@ class MainApp : Application(), AnkoLogger{
         ratings = RatingFirebaseStore(applicationContext)
         favourites = FavouriteFirebaseStore(applicationContext)
 
+        user = FirebaseAuth.getInstance().currentUser!!
 
         //hillforts = HillfortStoreRoom(applicationContext)
 //        images = ImageStoreRoom(applicationContext)

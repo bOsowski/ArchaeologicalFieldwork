@@ -3,6 +3,7 @@ package org.wit.archaeologicalfieldwork.activities
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
+import android.app.ListActivity
 import androidx.appcompat.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
 import android.content.CursorLoader
@@ -17,6 +18,7 @@ import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -38,7 +40,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
     lateinit var app : MainApp
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
-
+    val loginActivity = this
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -50,67 +52,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         app = application as MainApp
-
-        //todo: remove the below
-        startActivity(intentFor<HillfortListView>())
-        val testEmail = "test5@test.test"
-        val testPassword = "test2Password"
-
-
-        auth.createUserWithEmailAndPassword(testEmail, testPassword).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                info("##### Successfully created account.")
-            } else {
-                info("##### Failed to create account.")
-            }
-        }
-
-        auth.signInWithEmailAndPassword(testEmail, testPassword).addOnCompleteListener(this) { task ->
-            if(task.isSuccessful){
-                info("##### Successfully logged in")
-                app.user = FirebaseAuth.getInstance().currentUser!!
-
-                if(app.ratings is RatingFirebaseStore) {
-                    (app.ratings as RatingFirebaseStore).fetchRatings {
-
-                    }
-                }
-                if(app.favourites is FavouriteFirebaseStore) {
-                    (app.favourites as FavouriteFirebaseStore).fetchFavourites {
-
-                    }
-                }
-                if(app.hillforts is HillfortFirebaseStore) {
-                    (app.hillforts as HillfortFirebaseStore).fetchHillforts {
-
-                    }
-                }
-                if(app.images is ImageFirebaseStore) {
-                    (app.images as ImageFirebaseStore).fetchImages {
-
-                    }
-                }
-                if(app.notes is NoteFirebaseStore) {
-                    (app.notes as NoteFirebaseStore).fetchNotes {
-
-                    }
-                }
-                if(app.visits is VisitFirebaseStore) {
-                    (app.visits as VisitFirebaseStore).fetchVisits {
-
-                    }
-                }
-            }
-                else{
-                info("##### Failed to log in")
-            }
-        }
-
-
-        //app.data.create(user)
-        finish()
-        //todo: remove the above
-
         // Set up the login form.
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -287,6 +228,60 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
+            startActivity(intentFor<HillfortListView>())
+            println("parent = ${loginActivity}")
+            auth.createUserWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(loginActivity) { task ->
+                if (task.isSuccessful) {
+                    info("##### Successfully created account.")
+                } else {
+                    info("##### Failed to create account.")
+                }
+            }
+
+            auth.signInWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(loginActivity) { task ->
+                if(task.isSuccessful){
+                    info("##### Successfully logged in")
+                    app.user = FirebaseAuth.getInstance().currentUser!!
+
+                    if(app.ratings is RatingFirebaseStore) {
+                        (app.ratings as RatingFirebaseStore).fetchRatings {
+
+                        }
+                    }
+                    if(app.favourites is FavouriteFirebaseStore) {
+                        (app.favourites as FavouriteFirebaseStore).fetchFavourites {
+
+                        }
+                    }
+                    if(app.hillforts is HillfortFirebaseStore) {
+                        (app.hillforts as HillfortFirebaseStore).fetchHillforts {
+
+                        }
+                    }
+                    if(app.images is ImageFirebaseStore) {
+                        (app.images as ImageFirebaseStore).fetchImages {
+
+                        }
+                    }
+                    if(app.notes is NoteFirebaseStore) {
+                        (app.notes as NoteFirebaseStore).fetchNotes {
+
+                        }
+                    }
+                    if(app.visits is VisitFirebaseStore) {
+                        (app.visits as VisitFirebaseStore).fetchVisits {
+
+                        }
+                    }
+
+                    startActivity(intentFor<ListView>())
+                }
+                else{
+                    info("##### Failed to log in")
+                }
+            }
+
+            finish()
             return true
         }
 

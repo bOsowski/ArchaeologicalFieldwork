@@ -61,20 +61,22 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         hillfort.description = view?.hillfortDescription!!.text.toString()
         hillfort.addedBy = app.user.email!!
 
-        if(view?.ratingBar!!.rating != 0f){
+        if(view?.ratingBar!!.rating.toInt() != 0){
             async(UI) {
-                var rating = Rating(hillfortId = hillfort.id, addedBy = app.user.email!!, rating = view?.ratingBar!!.rating)
-                if(app.ratings.findAll().filter { it.hillfortId == hillfort.id && it.addedBy == app.user.email!! }.isEmpty()){
+                var rating: Rating? = app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == app.user.email!! }
+                if(rating == null){
+                    rating = Rating(hillfortId = hillfort.id, addedBy = app.user.email!!, rating = view?.ratingBar!!.rating)
                     app.ratings.create(rating)
                 }
                 else{
+                    rating.rating = view?.ratingBar!!.rating
                     app.ratings.update(rating)
                 }
             }
         }
         else{
             async(UI){
-                var ratingToDelete: Rating? = app.ratings.findAll().filter { it.hillfortId == hillfort.id }.find { it.addedBy == app.user.email!! }
+                var ratingToDelete: Rating? = app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == app.user.email!! }
                 if(ratingToDelete != null){
                     app.ratings.delete(ratingToDelete)
                 }
