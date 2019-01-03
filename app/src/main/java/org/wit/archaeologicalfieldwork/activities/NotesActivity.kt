@@ -76,17 +76,6 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
         async {
             showNotes()
         }
-
-        //show data changes if using firebase
-        if(app.notes is NoteFirebaseStore) {
-            Timer().schedule(timerTask {
-                async(UI) {
-                    (app.notes as NoteFirebaseStore).fetchNotes {
-                        showNotes()
-                    }
-                }
-            }, 0, noteRefreshTime)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -98,6 +87,16 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
                 async(UI) {
                     app.notes.create(note)
                     showNotes()
+                }
+            }
+            R.id.refresh_notes -> {
+                //show data changes if using firebase
+                if(app.notes is NoteFirebaseStore) {
+                    async(UI) {
+                        (app.notes as NoteFirebaseStore).fetchNotes {
+                            showNotes()
+                        }
+                    }
                 }
             }
         }
