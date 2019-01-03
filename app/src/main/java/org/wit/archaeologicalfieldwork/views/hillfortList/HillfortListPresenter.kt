@@ -2,6 +2,7 @@ package org.wit.archaeologicalfieldwork.views.hillfortList
 
 import android.view.MenuItem
 import android.widget.ImageButton
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.AnkoLogger
@@ -48,7 +49,7 @@ class HillfortListPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         async(UI) {
             if(filterFavourites){
                 val hillfortsToShow = ArrayList<Long>()
-                app.favourites.findAll().filter { it.addedBy == app.user.email }.forEach {
+                app.favourites.findAll().filter { it.addedBy == FirebaseAuth.getInstance().currentUser?.email }.forEach {
                     hillfortsToShow.add(it.hillfortId)
                 }
                 view?.showHillforts(hillforts.filter { hillfort ->  hillfortsToShow.contains(hillfort.id)})
@@ -78,10 +79,10 @@ class HillfortListPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
 
     fun doSetAsFavourite(hillfort: Hillfort, favouriteButton: ImageButton){
         async(UI){
-            val foundFavourites = app.favourites.findAll().filter { it.hillfortId == hillfort.id && it.addedBy == app.user.email }
+            val foundFavourites = app.favourites.findAll().filter { it.hillfortId == hillfort.id && it.addedBy == FirebaseAuth.getInstance().currentUser?.email }
             if(foundFavourites.isEmpty()){
                 async(UI){
-                    val favourite = Favourite(addedBy = app.user.email!!, hillfortId = hillfort.id)
+                    val favourite = Favourite(addedBy = FirebaseAuth.getInstance().currentUser?.email!!, hillfortId = hillfort.id)
                     app.favourites.create(favourite)
                 }
                 favouriteButton.setImageResource(android.R.drawable.star_big_on)
