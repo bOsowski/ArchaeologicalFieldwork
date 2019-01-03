@@ -27,13 +27,13 @@ class SettingsActivity : AppCompatActivity() {
         async(UI) {
             app.hillforts.findAll().forEach {
                 totalHillforts++
-                if (it.addedBy == app.user.email){
+                if (it.addedBy == FirebaseAuth.getInstance().currentUser?.email){
                     addedHillforts++
                 }
-                visitedHillforts += app.visits.findAll().filter { it.addedBy == app.user.email }.size
+                visitedHillforts += app.visits.findAll().filter { it.addedBy == FirebaseAuth.getInstance().currentUser?.email }.size
             }
 
-            email.setText(app.user.email)
+            email.setText(FirebaseAuth.getInstance().currentUser?.email)
             email.invalidate()
 
             hillforts_visited_settings.text = resources.getString(R.string.hillforts_added_settings, addedHillforts.toString())

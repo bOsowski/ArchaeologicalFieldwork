@@ -9,6 +9,7 @@ import androidx.core.view.MenuItemCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.coroutines.experimental.android.UI
 import com.google.android.gms.maps.GoogleMap
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_hillfort.*
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.*
@@ -96,7 +97,7 @@ class HillfortView : BaseView() {
         hillfortDescription.setText(hillfort.description)
 
         async(UI) {
-            val visit = presenter.app.visits.findAll().filter{it.hillfortId == hillfort.id}.find { it.addedBy == (application as MainApp).user.email }
+            val visit = presenter.app.visits.findAll().filter{it.hillfortId == hillfort.id}.find { it.addedBy == FirebaseAuth.getInstance().currentUser?.email }
             if(visit != null){
                 visitedCheckBox.text = resources.getString(R.string.visited_time, simplifyDate(Date(visit.date)))
             }
@@ -105,7 +106,7 @@ class HillfortView : BaseView() {
         }
 
         async(UI){
-            val currentUserRating = presenter.app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == presenter.app.user.email }
+            val currentUserRating = presenter.app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == FirebaseAuth.getInstance().currentUser?.email }
             if(currentUserRating != null){
                 ratingBar.rating = currentUserRating.rating
             }

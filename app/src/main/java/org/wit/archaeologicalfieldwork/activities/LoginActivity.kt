@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock.sleep
 import android.provider.ContactsContract
 import android.text.TextUtils
 import android.view.View
@@ -228,8 +229,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
         AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            startActivity(intentFor<HillfortListView>())
-            println("parent = ${loginActivity}")
+            var loginSuccessful = false
+            var loginVerified = false
+
+            //startActivity(intentFor<HillfortListView>())
             auth.createUserWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(loginActivity) { task ->
                 if (task.isSuccessful) {
                     info("##### Successfully created account.")
@@ -240,8 +243,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
 
             auth.signInWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(loginActivity) { task ->
                 if(task.isSuccessful){
+                    loginSuccessful = true
+                    loginVerified= true
                     info("##### Successfully logged in")
-                    app.user = FirebaseAuth.getInstance().currentUser!!
 
                     if(app.ratings is RatingFirebaseStore) {
                         (app.ratings as RatingFirebaseStore).fetchRatings {
@@ -274,15 +278,20 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, AnkoLogger {
                         }
                     }
 
-                    startActivity(intentFor<ListView>())
+                    startActivity(intentFor<HillfortListView>())
+                    finish()
                 }
                 else{
+                    loginVerified = true
                     info("##### Failed to log in")
                 }
             }
 
-            finish()
-            return true
+            while(!loginVerified){
+                sleep(5)
+            } //wait for the login to be verified.
+
+            return loginSuccessful
         }
 
         override fun onPostExecute(success: Boolean?) {
