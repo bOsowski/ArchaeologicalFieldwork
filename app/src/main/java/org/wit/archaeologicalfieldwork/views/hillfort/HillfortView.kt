@@ -96,6 +96,13 @@ class HillfortView : BaseView() {
             visitedCheckBox.isChecked = visit != null
             showImages()
         }
+
+        async(UI){
+            val currentUserRating = presenter.app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == presenter.app.user.email }
+            if(currentUserRating != null){
+                ratingBar.rating = currentUserRating.rating
+            }
+        }
     }
 
     fun showImages(){
