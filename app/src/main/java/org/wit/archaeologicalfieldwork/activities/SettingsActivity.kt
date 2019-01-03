@@ -30,9 +30,9 @@ class SettingsActivity : AppCompatActivity() {
                 if (it.addedBy == FirebaseAuth.getInstance().currentUser?.email){
                     addedHillforts++
                 }
-                visitedHillforts += app.visits.findAll().filter { it.addedBy == FirebaseAuth.getInstance().currentUser?.email }.size
             }
 
+            visitedHillforts += app.visits.findAll().filter { it.addedBy == FirebaseAuth.getInstance().currentUser?.email }.size
             email.setText(FirebaseAuth.getInstance().currentUser?.email)
             email.invalidate()
 
