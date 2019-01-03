@@ -17,9 +17,6 @@ class MainApp : Application(), AnkoLogger{
     lateinit var visits: Store<Visit>
     lateinit var ratings: Store<Rating>
     lateinit var favourites: Store<Favourite>
-    lateinit var user: FirebaseUser
-
-
 
     override fun onCreate() {
         super.onCreate()
@@ -30,14 +27,9 @@ class MainApp : Application(), AnkoLogger{
         ratings = RatingFirebaseStore(applicationContext)
         favourites = FavouriteFirebaseStore(applicationContext)
 
-        user = FirebaseAuth.getInstance().currentUser!!
-
         //hillforts = HillfortStoreRoom(applicationContext)
 //        images = ImageStoreRoom(applicationContext)
 //        notes = NoteStoreRoom(applicationContext)
 //        visits = VisitStoreRoom(applicationContext)
-
-
-
     }
 }

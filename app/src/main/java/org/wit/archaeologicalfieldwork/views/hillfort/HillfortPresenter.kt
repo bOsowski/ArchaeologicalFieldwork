@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_hillfort.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -59,13 +60,13 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
     fun doAddOrSave(){
         hillfort.name = view?.hillfortName!!.text.toString()
         hillfort.description = view?.hillfortDescription!!.text.toString()
-        hillfort.addedBy = app.user.email!!
+        hillfort.addedBy = FirebaseAuth.getInstance().currentUser?.email!!
 
         if(view?.ratingBar!!.rating.toInt() != 0){
             async(UI) {
-                var rating: Rating? = app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == app.user.email!! }
+                var rating: Rating? = app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == FirebaseAuth.getInstance().currentUser?.email }
                 if(rating == null){
-                    rating = Rating(hillfortId = hillfort.id, addedBy = app.user.email!!, rating = view?.ratingBar!!.rating)
+                    rating = Rating(hillfortId = hillfort.id, addedBy = FirebaseAuth.getInstance().currentUser?.email!!, rating = view?.ratingBar!!.rating)
                     app.ratings.create(rating)
                 }
                 else{
@@ -76,7 +77,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         }
         else{
             async(UI){
-                var ratingToDelete: Rating? = app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == app.user.email!! }
+                var ratingToDelete: Rating? = app.ratings.findAll().find { it.hillfortId == hillfort.id && it.addedBy == FirebaseAuth.getInstance().currentUser?.email }
                 if(ratingToDelete != null){
                     app.ratings.delete(ratingToDelete)
                 }
@@ -86,7 +87,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         if(view?.visitedCheckBox!!.isChecked){
             val visit = Visit()
             visit.hillfortId = hillfort.id
-            visit.addedBy = app.user.email!!
+            visit.addedBy = FirebaseAuth.getInstance().currentUser?.email!!
             if(date != null){
                 visit.date = date!!.time
             }
@@ -99,7 +100,7 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
         }
         else{
             async(UI) {
-                app.visits.delete(app.visits.findAll().filter { it.hillfortId == hillfort.id }.find { it.addedBy == app.user.email!!}!!)
+                app.visits.delete(app.visits.findAll().filter { it.hillfortId == hillfort.id }.find { it.addedBy == FirebaseAuth.getInstance().currentUser?.email}!!)
             }
         }
         if (hillfort.name.isNotEmpty()) {
@@ -167,11 +168,11 @@ class HillfortPresenter(view: BaseView) : BasePresenter(view), AnkoLogger{
                 if(data != null){
                     async(UI) {
                         if(data.data != null){
-                            val image = Image(hillfortId = hillfort.id, data = data.data.toString(), addedBy = app.user.email!!)
+                            val image = Image(hillfortId = hillfort.id, data = data.data.toString(), addedBy = FirebaseAuth.getInstance().currentUser?.email!!)
                             image.id = app.images.create(image)
                         }else{
                             if(app.images is ImageFirebaseStore){
-                                val image = Image(hillfortId = hillfort.id, data = "", addedBy = app.user.email!!)
+                                val image = Image(hillfortId = hillfort.id, data = "", addedBy = FirebaseAuth.getInstance().currentUser?.email!!)
                                 image.id = (app.images as ImageFirebaseStore).create(image, data.extras!!.getParcelable("data")!!)
                             }
                         }

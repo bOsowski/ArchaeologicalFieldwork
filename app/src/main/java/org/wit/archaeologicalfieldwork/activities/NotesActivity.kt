@@ -16,6 +16,7 @@ import org.wit.archaeologicalfieldwork.models.Hillfort
 import org.wit.archaeologicalfieldwork.models.Note
 import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.intentFor
@@ -32,7 +33,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
     lateinit var hillfort: Hillfort
 
     override fun onNoteClick(note: Note) {
-        if(app.user.email != note.addedBy){
+        if(FirebaseAuth.getInstance().currentUser?.email != note.addedBy){
             return
         }
 
@@ -83,7 +84,7 @@ class NotesActivity : AppCompatActivity(), NoteListener, AnkoLogger {
             R.id.note_add -> {
                 var note = Note()
                 note.hillfortId = hillfort.id
-                note.addedBy = app.user.email!!
+                note.addedBy = FirebaseAuth.getInstance().currentUser?.email!!
                 async(UI) {
                     app.notes.create(note)
                     showNotes()
